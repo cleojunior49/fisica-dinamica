@@ -1,0 +1,2767 @@
+[index.html](https://github.com/user-attachments/files/31442080/index.html)
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Física Dinâmica - Aprenda Física Jogando</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.3)),
+                        url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 400"><defs><linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:%23667eea;stop-opacity:0.3" /><stop offset="100%" style="stop-color:%23764ba2;stop-opacity:0.3" /></linearGradient></defs><circle cx="100" cy="100" r="80" fill="url(%23grad)"/><circle cx="300" cy="250" r="60" fill="url(%23grad)"/><circle cx="500" cy="150" r="90" fill="url(%23grad)"/><circle cx="700" cy="300" r="70" fill="url(%23grad)"/><circle cx="900" cy="100" r="85" fill="url(%23grad)"/><circle cx="1100" cy="250" r="65" fill="url(%23grad)"/></svg>');
+            background-size: cover;
+            background-position: center;
+            padding: 30px 20px;
+            text-align: center;
+            color: white;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.5);
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+        
+        .header p {
+            font-size: 1.3em;
+            opacity: 0.95;
+        }
+        
+        .nav {
+            background: rgba(255, 255, 255, 0.98);
+            padding: 15px;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .nav-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: all 0.3s;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        }
+        
+        .nav-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 12px rgba(0, 0, 0, 0.3);
+        }
+        
+        .nav-btn.active {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            transform: scale(1.05);
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 30px auto;
+            padding: 20px;
+        }
+        
+        .page {
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+        
+        .page.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 35px;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+            transition: all 0.3s;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25);
+        }
+        
+        .level-progress {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .level-item {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            padding: 25px;
+            border-radius: 15px;
+            color: white;
+            text-align: center;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s;
+        }
+        
+        .level-item:hover {
+            transform: scale(1.05);
+        }
+        
+        .level-item h3 {
+            font-size: 2.5em;
+            margin-bottom: 8px;
+        }
+        
+        .level-item p {
+            font-size: 1.1em;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .level-item small {
+            opacity: 0.9;
+        }
+        
+        .points-display {
+            font-size: 4em;
+            font-weight: bold;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-align: center;
+            margin: 30px 0;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            color: white;
+            transition: all 0.3s;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .stat-number {
+            font-size: 3.5em;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        
+        .stat-label {
+            font-size: 1.1em;
+            opacity: 0.95;
+        }
+        
+        .flashcard {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+            cursor: pointer;
+            transition: all 0.4s;
+            border: 3px solid transparent;
+        }
+        
+        .flashcard:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25);
+            border-color: #667eea;
+        }
+        
+        .flashcard-front, .flashcard-back {
+            transition: opacity 0.3s;
+        }
+        
+        .flashcard-back {
+            display: none;
+        }
+        
+        .flashcard.flipped .flashcard-front {
+            display: none;
+        }
+        
+        .flashcard.flipped .flashcard-back {
+            display: block;
+        }
+        
+        .flashcard.flipped {
+            background: linear-gradient(135deg, #e0f7fa 0%, #e1bee7 100%);
+        }
+        
+        .flashcard h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.6em;
+        }
+        
+        .flashcard p {
+            font-size: 1.15em;
+            line-height: 1.7;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .flashcard strong {
+            color: #f5576c;
+            font-size: 1.2em;
+        }
+        
+        .points-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 25px;
+            font-weight: bold;
+            margin-top: 12px;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+        }
+        
+        .admin-btn { background:#667eea; color:#fff; border:none; padding:10px 16px; border-radius:8px; cursor:pointer; font-weight:bold; font-size:14px; }
+        .admin-btn:hover { filter:brightness(1.08); }
+
+        .card-figure {
+            display: block;
+            width: 100%;
+            max-width: 340px;
+            height: auto;
+            margin: 6px auto 16px;
+            background: #f7f8ff;
+            border-radius: 12px;
+            padding: 8px;
+        }
+        .flashcard.flipped .card-figure { background: #ffffff; }
+        .card-why {
+            display: block;
+            color: #5a3fc0;
+            font-weight: bold;
+            font-size: 1.15em;
+            margin: 4px 0 10px;
+        }
+        .card-formula {
+            background: linear-gradient(135deg, #eef1ff, #f3e8ff);
+            text-align: center;
+            padding: 10px;
+            border-radius: 10px;
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #5a3fc0;
+            margin: 12px 0;
+        }
+        .card-example {
+            background: #eef6ff;
+            border-left: 4px solid #667eea;
+            padding: 10px 14px;
+            border-radius: 8px;
+            margin: 12px 0;
+            font-size: 1.02em;
+        }
+        .card-warning {
+            background: #fff4e5;
+            border-left: 4px solid #ff9800;
+            padding: 10px 14px;
+            border-radius: 8px;
+            margin: 12px 0;
+            font-size: 1.02em;
+        }
+        
+        .topic-tabs {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+        
+        .topic-tab {
+            background: white;
+            padding: 14px 28px;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 3px solid #667eea;
+            color: #667eea;
+            font-weight: bold;
+            font-size: 1.05em;
+        }
+        
+        .topic-tab:hover {
+            transform: scale(1.05);
+        }
+        
+        .topic-tab.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .desafio-level-content {
+            display: none;
+        }
+        
+        .desafio-level-content.active {
+            display: block;
+        }
+        
+        .quiz-level-content {
+            display: none;
+        }
+        
+        .quiz-level-content.active {
+            display: block;
+        }
+        
+        .topic-content {
+            display: none;
+        }
+        
+        .topic-content.active {
+            display: block;
+        }
+        
+        .simulation-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+        }
+        
+        .simulation-card {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+            text-align: center;
+            transition: all 0.3s;
+            border: 3px solid transparent;
+        }
+        
+        .simulation-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25);
+            border-color: #667eea;
+        }
+        
+        .simulation-card h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+        }
+        
+        .simulation-card p {
+            color: #666;
+            margin-bottom: 20px;
+            font-size: 1.05em;
+        }
+        
+        .sim-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 14px 35px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: all 0.3s;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+        
+        .sim-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .quiz-card {
+            background: white;
+            border-radius: 20px;
+            padding: 35px;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+        
+        .quiz-card h3 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+        }
+        
+        .quiz-card > p {
+            font-size: 1.15em;
+            margin-bottom: 25px;
+            line-height: 1.6;
+        }
+        
+        .quiz-figure {
+            display: block;
+            width: 100%;
+            max-width: 300px;
+            height: auto;
+            margin: 4px 0 14px;
+            background: #f7f8ff;
+            border-radius: 10px;
+            padding: 6px;
+        }
+        
+        .quiz-option {
+            background: #f8f9fa;
+            padding: 18px 20px;
+            margin: 12px 0;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 3px solid transparent;
+            font-size: 1.05em;
+        }
+        
+        .quiz-option:hover {
+            background: #e9ecef;
+            border-color: #667eea;
+            transform: translateX(8px);
+        }
+        
+        .quiz-option.correct {
+            background: #4CAF50;
+            color: white;
+            border-color: #4CAF50;
+            animation: correctPulse 0.5s;
+        }
+        
+        .quiz-option.incorrect {
+            background: #f44336;
+            color: white;
+            border-color: #f44336;
+            animation: shake 0.5s;
+        }
+        
+        @keyframes correctPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+        
+        .badge-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 25px;
+            margin-top: 25px;
+        }
+        
+        .badge-item {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s;
+            border: 3px solid #e0e0e0;
+        }
+        
+        .badge-item:hover {
+            transform: translateY(-5px);
+        }
+        
+        .badge-item.unlocked {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            border-color: #f5576c;
+            animation: unlock 0.6s, badgePulse 2s infinite 0.6s;
+            box-shadow: 0 10px 30px rgba(240, 147, 251, 0.5);
+        }
+        
+        @keyframes unlock {
+            0% { transform: scale(0.8) rotate(-5deg); opacity: 0; }
+            50% { transform: scale(1.2) rotate(5deg); }
+            100% { transform: scale(1) rotate(0deg); opacity: 1; }
+        }
+        
+        @keyframes badgePulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        
+        @keyframes confetti {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+        }
+        
+        .confetti-piece {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background: #f093fb;
+            top: -10px;
+            animation: confetti 3s ease-out forwards;
+            z-index: 2000;
+        }
+        
+        .badge-item.locked {
+            opacity: 0.6;
+            filter: grayscale(80%);
+        }
+        
+        .badge-icon {
+            font-size: 4em;
+            margin-bottom: 15px;
+        }
+        
+        .badge-item h4 {
+            font-size: 1.3em;
+            margin-bottom: 10px;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 1000;
+            padding: 20px;
+            overflow-y: auto;
+        }
+        
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.3s;
+        }
+        
+        .modal-content {
+            max-width: 1200px;
+            width: 100%;
+            height: 90vh;
+            position: relative;
+        }
+        
+        .modal-close {
+            background: #f44336;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            transition: all 0.3s;
+        }
+        
+        .modal-close:hover {
+            background: #d32f2f;
+            transform: scale(1.05);
+        }
+        
+        .modal iframe {
+            width: 100%;
+            height: calc(100% - 60px);
+            border: none;
+            border-radius: 15px;
+            background: white;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+        }
+        
+        .info-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .info-list li {
+            padding: 12px 0;
+            font-size: 1.1em;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .info-list li:last-child {
+            border-bottom: none;
+        }
+        
+        h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 2em;
+        }
+        
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .header p {
+                font-size: 1em;
+            }
+            
+            .nav-btn {
+                padding: 10px 18px;
+                font-size: 14px;
+            }
+            
+            .points-display {
+                font-size: 2.5em;
+            }
+            
+            .simulation-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>⚡ FÍSICA DINÂMICA ⚡</h1>
+        <p>Aprenda Física Jogando - Explore, Descubra, Domine!</p>
+    </div>
+    
+    <div class="nav">
+        <button class="nav-btn active" onclick="showPage('home')">🏠 Home</button>
+        <button class="nav-btn" onclick="showPage('flashcards')">📚 Flash Cards</button>
+        <button class="nav-btn" onclick="showPage('simulacoes')">🔬 Simulações</button>
+        <button class="nav-btn" onclick="showPage('desafios')">🎯 Desafios</button>
+        <button class="nav-btn" onclick="showPage('conquistas')">🏆 Conquistas</button>
+    </div>
+    
+    <div class="container">
+        <!-- HOME PAGE -->
+        <div id="home" class="page active">
+            <div class="card">
+                <h2 style="text-align: center;">Seu Progresso Gamificado</h2>
+                <div class="points-display" id="totalPoints">0 Pontos</div>
+                
+                <div class="level-progress">
+                    <div class="level-item">
+                        <h3>🥉</h3>
+                        <p>Aprendiz</p>
+                        <small>0-100 pts</small>
+                    </div>
+                    <div class="level-item">
+                        <h3>🥈</h3>
+                        <p>Estudante</p>
+                        <small>101-300 pts</small>
+                    </div>
+                    <div class="level-item">
+                        <h3>🥇</h3>
+                        <p>Cientista</p>
+                        <small>301-600 pts</small>
+                    </div>
+                    <div class="level-item">
+                        <h3>💎</h3>
+                        <p>Mestre</p>
+                        <small>601-1000 pts</small>
+                    </div>
+                    <div class="level-item">
+                        <h3>⚡</h3>
+                        <p>Einstein</p>
+                        <small>1001+ pts</small>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number" id="cardsCompleted">0</div>
+                    <div class="stat-label">Flash Cards Completos</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="simsExplored">0</div>
+                    <div class="stat-label">Simulações Exploradas</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="quizzesCompleted">0</div>
+                    <div class="stat-label">Quizzes Completados</div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h2>🎮 Como Ganhar Pontos</h2>
+                <ul class="info-list">
+                    <li>📚 Completar Flash Card: <strong>10 pontos</strong></li>
+                    <li>🔬 Explorar Simulação: <strong>15 pontos</strong></li>
+                    <li>✅ Acertar Questão de Quiz: <strong>20 pontos</strong></li>
+                    <li>🎯 Completar Desafio Semanal: <strong>100 pontos</strong></li>
+                </ul>
+                
+                <div style="margin-top: 30px; padding: 20px; background: #f5f5f5; border-radius: 10px;">
+                    <h3 style="color: #667eea; margin-bottom: 15px;">👤 Meu Perfil</h3>
+                    <p><strong>Nome:</strong> <span id="userNameDisplay">-</span></p>
+                    <p><strong>Turma:</strong> <span id="userTurmaDisplay">-</span></p>
+                    <p><strong>Membro desde:</strong> <span id="userStartDisplay">-</span></p>
+                    <p style="margin-top: 15px; font-size: 0.9em; color: #666;">💾 Seus dados são salvos automaticamente no Google Sheets</p>
+                    <button onclick="resetProgress()" style="background: #f44336; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; margin-top: 10px;">↺ Resetar Progresso</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- FLASH CARDS PAGE -->
+        <div id="flashcards" class="page">
+            <div class="card">
+                <h2>📚 Flash Cards de Física</h2>
+                <p style="font-size: 1.15em; margin-bottom: 25px;">Clique nos cards para revelar a resposta e ganhar pontos!</p>
+                
+                <div class="topic-tabs">
+                    <div class="topic-tab active" onclick="showTopic('cinematica')">🎯 Cinemática</div>
+                    <div class="topic-tab" onclick="showTopic('dinamica')">💪 Dinâmica</div>
+                    <div class="topic-tab" onclick="showTopic('energia')">⚡ Energia</div>
+                </div>
+                
+                <div id="cinematica" class="topic-content active">
+                    <div style="text-align: center; margin-bottom: 30px;">
+                        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 150'%3E%3Cdefs%3E%3ClinearGradient id='car-grad' x1='0%25' y1='0%25' x2='100%25' y2='0%25'%3E%3Cstop offset='0%25' style='stop-color:%23667eea' /%3E%3Cstop offset='100%25' style='stop-color:%23764ba2' /%3E%3C/linearGradient%3E%3C/defs%3E%3Crect x='20' y='80' width='160' height='3' fill='%23333' opacity='0.3'/%3E%3Crect x='50' y='60' width='80' height='30' rx='5' fill='url(%23car-grad)'/%3E%3Ccircle cx='70' cy='95' r='8' fill='%23333'/%3E%3Ccircle cx='110' cy='95' r='8' fill='%23333'/%3E%3Cpath d='M 60 60 L 70 45 L 110 45 L 120 60 Z' fill='url(%23car-grad)' opacity='0.8'/%3E%3Ctext x='100' y='35' font-family='Arial' font-size='14' fill='%23667eea' text-anchor='middle'%3Ev = Δs/Δt%3C/text%3E%3C/svg%3E" alt="Cinemática" style="width: 200px; height: 150px; margin: 20px auto; display: block;">
+                        <h3 style="color: #667eea; margin-top: 10px;">🎯 Cinemática - Estudo do Movimento</h3>
+                    </div>
+                    
+                    <div class="flashcard" onclick="flipCard(this)">
+                        <div class="flashcard-front">
+                            <h3>Card 1: Velocidade Média</h3>
+                            <svg class="card-figure" viewBox="0 0 320 120" xmlns="http://www.w3.org/2000/svg">
+                                <rect x="0" y="82" width="320" height="8" fill="#999"/>
+                                <line x1="10" y1="86" x2="310" y2="86" stroke="#fff" stroke-width="2" stroke-dasharray="14 12"/>
+                                <rect x="40" y="56" width="46" height="20" rx="5" fill="#667eea"/>
+                                <rect x="50" y="46" width="26" height="13" rx="4" fill="#8aa0f0"/>
+                                <circle cx="52" cy="80" r="6" fill="#333"/><circle cx="76" cy="80" r="6" fill="#333"/>
+                                <text x="26" y="108" font-size="11" fill="#333">0 km</text>
+                                <text x="250" y="108" font-size="11" fill="#333">180 km</text>
+                                <text x="160" y="30" font-size="12" fill="#667eea" text-anchor="middle">viagem de 2 h (com 1 parada)</text>
+                            </svg>
+                            <p>Um carro percorre 180 km em 2 h, mas ficou 30 min parado no caminho. Dá para dizer que ele andou a 90 km/h o tempo todo?</p>
+                            <p style="color: #999; margin-top: 15px;">👆 Clique para pensar</p>
+                            <span class="points-badge">10 pontos</span>
+                        </div>
+                        <div class="flashcard-back">
+                            <h3>💡 Por que não?</h3>
+                            <span class="card-why">A velocidade média não descreve cada instante — ela "espalha" o percurso pelo tempo total.</span>
+                            <p>90 km/h é só a média: 180 km ÷ 2 h. Durante a parada a velocidade foi 0, e em outros trechos passou de 90. O <strong>velocímetro</strong> mostra a velocidade instantânea, que muda a cada momento.</p>
+                            <div class="card-formula">v = Δs / Δt &nbsp;·&nbsp; SI: m/s</div>
+                            <div class="card-warning">⚠️ Erro comum: achar que a velocidade média foi a velocidade "mantida" durante a viagem.</div>
+                            <span class="points-badge">+10 pontos ganhos!</span>
+                        </div>
+                    </div>
+                    
+                    <div class="flashcard" onclick="flipCard(this)">
+                        <div class="flashcard-front">
+                            <h3>Card 2: Aceleração</h3>
+                            <svg class="card-figure" viewBox="0 0 320 120" xmlns="http://www.w3.org/2000/svg">
+                                <rect x="0" y="84" width="320" height="6" fill="#999"/>
+                                <rect x="120" y="56" width="54" height="24" rx="6" fill="#f5576c"/>
+                                <circle cx="134" cy="84" r="6" fill="#333"/><circle cx="162" cy="84" r="6" fill="#333"/>
+                                <line x1="178" y1="46" x2="245" y2="46" stroke="#2196F3" stroke-width="4"/>
+                                <polygon points="245,41 257,46 245,51" fill="#2196F3"/>
+                                <text x="210" y="38" font-size="11" fill="#2196F3" text-anchor="middle">v (movimento)</text>
+                                <line x1="116" y1="68" x2="66" y2="68" stroke="#ff9800" stroke-width="4"/>
+                                <polygon points="66,63 54,68 66,73" fill="#ff9800"/>
+                                <text x="66" y="58" font-size="11" fill="#ff9800">a (freando)</text>
+                            </svg>
+                            <p>Você pisa no freio e o carro vai ficando mais devagar. Existe aceleração nesse momento, mesmo a velocidade diminuindo?</p>
+                            <p style="color: #999; margin-top: 15px;">👆 Clique para pensar</p>
+                            <span class="points-badge">10 pontos</span>
+                        </div>
+                        <div class="flashcard-back">
+                            <h3>💡 Sim, existe!</h3>
+                            <span class="card-why">Aceleração é qualquer mudança na velocidade — não significa só "ir mais rápido".</span>
+                            <p>Ao frear, a velocidade varia (diminui), então há aceleração — só que apontando <strong>contra</strong> o movimento. Por isso freada forte "joga" você para frente.</p>
+                            <div class="card-formula">a = Δv / Δt &nbsp;·&nbsp; SI: m/s²</div>
+                            <div class="card-warning">⚠️ Erro comum: pensar que só há aceleração quando o objeto ganha velocidade.</div>
+                            <span class="points-badge">+10 pontos ganhos!</span>
+                        </div>
+                    </div>
+                    
+                    <div class="flashcard" onclick="flipCard(this)">
+                        <div class="flashcard-front">
+                            <h3>Card 3: MRU</h3>
+                            <svg class="card-figure" viewBox="0 0 320 110" xmlns="http://www.w3.org/2000/svg">
+                                <rect x="0" y="72" width="320" height="5" fill="#999"/>
+                                <g fill="#667eea">
+                                    <circle cx="40" cy="64" r="9"/><circle cx="110" cy="64" r="9"/>
+                                    <circle cx="180" cy="64" r="9"/><circle cx="250" cy="64" r="9"/>
+                                </g>
+                                <g stroke="#2196F3" stroke-width="3">
+                                    <line x1="51" y1="46" x2="80" y2="46"/><line x1="121" y1="46" x2="150" y2="46"/>
+                                    <line x1="191" y1="46" x2="220" y2="46"/>
+                                </g>
+                                <text x="160" y="100" font-size="11" fill="#333" text-anchor="middle">espaços iguais em tempos iguais</text>
+                            </svg>
+                            <p>Um objeto se move em linha reta com velocidade constante. Como a aceleração pode ser zero se ele está claramente em movimento?</p>
+                            <p style="color: #999; margin-top: 15px;">👆 Clique para pensar</p>
+                            <span class="points-badge">10 pontos</span>
+                        </div>
+                        <div class="flashcard-back">
+                            <h3>💡 Movimento ≠ aceleração</h3>
+                            <span class="card-why">A aceleração mede a MUDANÇA da velocidade, não o fato de estar em movimento.</span>
+                            <p>No MRU a velocidade não muda, então a = 0. O objeto percorre distâncias iguais em tempos iguais — o gráfico posição × tempo é uma reta inclinada.</p>
+                            <div class="card-formula">S = S₀ + v·t</div>
+                            <div class="card-warning">⚠️ Erro comum: confundir "aceleração zero" com "objeto parado". Parado é um caso; velocidade constante qualquer também dá a = 0.</div>
+                            <span class="points-badge">+10 pontos ganhos!</span>
+                        </div>
+                    </div>
+
+                    <div class="flashcard" onclick="flipCard(this)">
+                        <div class="flashcard-front">
+                            <h3>Card 4: MRUV</h3>
+                            <svg class="card-figure" viewBox="0 0 320 110" xmlns="http://www.w3.org/2000/svg">
+                                <rect x="0" y="72" width="320" height="5" fill="#999"/>
+                                <g fill="#f5576c">
+                                    <circle cx="28" cy="64" r="8"/><circle cx="66" cy="64" r="8"/>
+                                    <circle cx="128" cy="64" r="8"/><circle cx="210" cy="64" r="8"/><circle cx="300" cy="64" r="8"/>
+                                </g>
+                                <text x="160" y="100" font-size="11" fill="#333" text-anchor="middle">espaços crescentes a cada segundo</text>
+                            </svg>
+                            <p>No MRUV a aceleração é constante. Então por que a distância percorrida a cada segundo vai ficando cada vez maior?</p>
+                            <p style="color: #999; margin-top: 15px;">👆 Clique para pensar</p>
+                            <span class="points-badge">10 pontos</span>
+                        </div>
+                        <div class="flashcard-back">
+                            <h3>💡 Culpa do t²</h3>
+                            <span class="card-why">Aceleração constante faz a velocidade crescer de forma constante — e velocidade maior percorre mais espaço.</span>
+                            <p>Cada segundo o objeto está mais rápido que no anterior, então avança mais. Por isso a distância depende do tempo ao quadrado, não linearmente.</p>
+                            <div class="card-formula">S = S₀ + v₀·t + a·t²/2</div>
+                            <div class="card-warning">⚠️ Erro comum: achar que aceleração constante produz espaços iguais (isso é o MRU).</div>
+                            <span class="points-badge">+10 pontos ganhos!</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="dinamica" class="topic-content">
+                    <div style="text-align: center; margin-bottom: 30px;">
+                        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 150'%3E%3Cdefs%3E%3ClinearGradient id='force-grad' x1='0%25' y1='0%25' x2='100%25' y2='0%25'%3E%3Cstop offset='0%25' style='stop-color:%23f093fb' /%3E%3Cstop offset='100%25' style='stop-color:%23f5576c' /%3E%3C/linearGradient%3E%3C/defs%3E%3Crect x='20' y='100' width='160' height='5' fill='%23333' opacity='0.3'/%3E%3Crect x='60' y='70' width='40' height='30' rx='3' fill='url(%23force-grad)'/%3E%3Cpath d='M 30 85 L 55 85' stroke='%23f44336' stroke-width='3' fill='none'/%3E%3Cpath d='M 50 80 L 55 85 L 50 90' fill='%23f44336'/%3E%3Ctext x='30' y='75' font-family='Arial' font-size='12' fill='%23f44336'%3EF%3C/text%3E%3Ctext x='100' y='35' font-family='Arial' font-size='14' fill='%23f5576c' text-anchor='middle'%3EF = ma%3C/text%3E%3C/svg%3E" alt="Dinâmica" style="width: 200px; height: 150px; margin: 20px auto; display: block;">
+                        <h3 style="color: #f5576c; margin-top: 10px;">💪 Dinâmica - Leis de Newton</h3>
+                    </div>
+                    
+                    <div class="flashcard" onclick="flipCard(this)">
+                        <div class="flashcard-front">
+                            <h3>Card 5: 1ª Lei de Newton</h3>
+                            <svg class="card-figure" viewBox="0 0 320 130" xmlns="http://www.w3.org/2000/svg">
+                                <rect x="30" y="40" width="180" height="58" rx="10" fill="#667eea"/>
+                                <rect x="44" y="52" width="30" height="24" rx="3" fill="#cfe0ff"/>
+                                <circle cx="70" cy="102" r="10" fill="#333"/><circle cx="175" cy="102" r="10" fill="#333"/>
+                                <circle cx="150" cy="56" r="8" fill="#ffcc80"/>
+                                <line x1="150" y1="64" x2="164" y2="82" stroke="#333" stroke-width="4"/>
+                                <line x1="30" y1="118" x2="68" y2="118" stroke="#ff9800" stroke-width="4"/>
+                                <polygon points="68,113 80,118 68,123" fill="#ff9800"/>
+                                <text x="86" y="122" font-size="11" fill="#ff9800">ônibus freia</text>
+                                <text x="215" y="52" font-size="11" fill="#f5576c">corpo segue →</text>
+                            </svg>
+                            <p>Quando o ônibus freia de repente, seu corpo é jogado para frente. Que força te empurrou?</p>
+                            <p style="color: #999; margin-top: 15px;">👆 Clique para pensar</p>
+                            <span class="points-badge">10 pontos</span>
+                        </div>
+                        <div class="flashcard-back">
+                            <h3>💡 Nenhuma!</h3>
+                            <span class="card-why">É a inércia: seu corpo tende a continuar como estava — em movimento.</span>
+                            <p>O ônibus freou, mas seu corpo "quer" continuar na mesma velocidade. Não há força te empurrando para frente; falta uma força que te segure. Por isso o cinto existe.</p>
+                            <div class="card-formula">Inércia = tendência de manter o estado de movimento</div>
+                            <div class="card-warning">⚠️ Erro comum: inventar uma "força para frente". Na verdade é a ausência de força que continua o movimento.</div>
+                            <span class="points-badge">+10 pontos ganhos!</span>
+                        </div>
+                    </div>
+                    
+                    <div class="flashcard" onclick="flipCard(this)">
+                        <div class="flashcard-front">
+                            <h3>Card 6: 2ª Lei de Newton</h3>
+                            <svg class="card-figure" viewBox="0 0 320 130" xmlns="http://www.w3.org/2000/svg">
+                                <rect x="34" y="28" width="40" height="26" rx="4" fill="#4CAF50"/>
+                                <line x1="20" y1="41" x2="32" y2="41" stroke="#f44336" stroke-width="4"/>
+                                <polygon points="32,36 32,46 40,41" fill="#f44336"/>
+                                <text x="14" y="26" font-size="10" fill="#f44336">F</text>
+                                <line x1="76" y1="41" x2="128" y2="41" stroke="#2196F3" stroke-width="4"/>
+                                <polygon points="128,36 138,41 128,46" fill="#2196F3"/>
+                                <text x="92" y="34" font-size="10" fill="#2196F3">a grande</text>
+                                <rect x="34" y="84" width="94" height="34" rx="4" fill="#9C27B0"/>
+                                <line x1="20" y1="101" x2="32" y2="101" stroke="#f44336" stroke-width="4"/>
+                                <polygon points="32,96 32,106 40,101" fill="#f44336"/>
+                                <text x="14" y="82" font-size="10" fill="#f44336">F</text>
+                                <line x1="130" y1="101" x2="150" y2="101" stroke="#2196F3" stroke-width="4"/>
+                                <polygon points="150,96 160,101 150,106" fill="#2196F3"/>
+                                <text x="160" y="98" font-size="10" fill="#2196F3">a pequena</text>
+                                <text x="250" y="70" font-size="13" fill="#5a3fc0" text-anchor="middle">a = F / m</text>
+                            </svg>
+                            <p>Com a mesma força, por que um carrinho de compras dispara e um caminhão mal se mexe?</p>
+                            <p style="color: #999; margin-top: 15px;">👆 Clique para pensar</p>
+                            <span class="points-badge">10 pontos</span>
+                        </div>
+                        <div class="flashcard-back">
+                            <h3>💡 É a massa</h3>
+                            <span class="card-why">Mesma força, massa maior → aceleração menor. A massa resiste à mudança de movimento.</span>
+                            <p>Reescrevendo F = m·a como a = F/m: se a força é a mesma, quanto maior a massa, menor a aceleração. A massa é a medida da inércia.</p>
+                            <div class="card-formula">F = m · a</div>
+                            <div class="card-warning">⚠️ Erro comum: achar que "mais força = mais velocidade". Força define a aceleração, não a velocidade diretamente.</div>
+                            <span class="points-badge">+10 pontos ganhos!</span>
+                        </div>
+                    </div>
+
+                    <div class="flashcard" onclick="flipCard(this)">
+                        <div class="flashcard-front">
+                            <h3>Card 7: 3ª Lei de Newton</h3>
+                            <svg class="card-figure" viewBox="0 0 320 140" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="160" cy="160" r="95" fill="#4CAF50" opacity="0.35"/>
+                                <text x="160" y="135" font-size="11" fill="#2e7d32" text-anchor="middle">TERRA</text>
+                                <circle cx="160" cy="40" r="9" fill="#ffcc80"/>
+                                <line x1="160" y1="49" x2="160" y2="72" stroke="#333" stroke-width="4"/>
+                                <line x1="188" y1="46" x2="188" y2="82" stroke="#f5576c" stroke-width="4"/>
+                                <polygon points="183,82 193,82 188,92" fill="#f5576c"/>
+                                <text x="196" y="66" font-size="10" fill="#f5576c">Terra puxa você</text>
+                                <line x1="132" y1="82" x2="132" y2="46" stroke="#2196F3" stroke-width="4"/>
+                                <polygon points="127,46 137,46 132,36" fill="#2196F3"/>
+                                <text x="122" y="66" font-size="10" fill="#2196F3" text-anchor="end">você puxa a Terra</text>
+                            </svg>
+                            <p>A Terra te puxa para baixo e você puxa a Terra para cima com a mesma força. Então por que só você cai?</p>
+                            <p style="color: #999; margin-top: 15px;">👆 Clique para pensar</p>
+                            <span class="points-badge">10 pontos</span>
+                        </div>
+                        <div class="flashcard-back">
+                            <h3>💡 Mesma força, massas diferentes</h3>
+                            <span class="card-why">Ação e reação têm a mesma intensidade, mas agem em corpos diferentes — e por isso não se cancelam.</span>
+                            <p>Pela 2ª lei, a = F/m. Sua massa é minúscula perto da Terra, então você acelera muito; a Terra, com massa enorme, praticamente não se move.</p>
+                            <div class="card-formula">Ação e reação: mesma força, corpos diferentes</div>
+                            <div class="card-warning">⚠️ Erro comum: achar que ação e reação se anulam. Elas só se anulariam se atuassem no mesmo corpo.</div>
+                            <span class="points-badge">+10 pontos ganhos!</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="energia" class="topic-content">
+                    <div style="text-align: center; margin-bottom: 30px;">
+                        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 150'%3E%3Cdefs%3E%3ClinearGradient id='energy-grad' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%234CAF50' /%3E%3Cstop offset='100%25' style='stop-color:%238BC34A' /%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath d='M 20 120 Q 60 80 100 90 T 180 100' stroke='%23333' stroke-width='2' fill='none' opacity='0.3'/%3E%3Ccircle cx='100' cy='40' r='15' fill='url(%23energy-grad)'/%3E%3Cpath d='M 95 40 L 105 40 M 100 35 L 100 45' stroke='white' stroke-width='2'/%3E%3Ctext x='100' y='75' font-family='Arial' font-size='10' fill='%234CAF50' text-anchor='middle'%3EEp = mgh%3C/text%3E%3Ctext x='100' y='130' font-family='Arial' font-size='10' fill='%234CAF50' text-anchor='middle'%3EEc = mv²/2%3C/text%3E%3Cpath d='M 100 45 L 100 70' stroke='%234CAF50' stroke-width='2' marker-end='url(%23arrow)'/%3E%3Cdefs%3E%3Cmarker id='arrow' markerWidth='10' markerHeight='10' refX='5' refY='3' orient='auto' markerUnits='strokeWidth'%3E%3Cpath d='M0,0 L0,6 L9,3 z' fill='%234CAF50' /%3E%3C/marker%3E%3C/defs%3E%3C/svg%3E" alt="Energia" style="width: 200px; height: 150px; margin: 20px auto; display: block;">
+                        <h3 style="color: #4CAF50; margin-top: 10px;">⚡ Energia - Conservação e Transformação</h3>
+                    </div>
+                    
+                    <div class="flashcard" onclick="flipCard(this)">
+                        <div class="flashcard-front">
+                            <h3>Card 8: Energia Cinética</h3>
+                            <svg class="card-figure" viewBox="0 0 320 140" xmlns="http://www.w3.org/2000/svg">
+                                <rect x="20" y="30" width="42" height="18" rx="4" fill="#667eea"/>
+                                <text x="41" y="24" font-size="10" fill="#333" text-anchor="middle">40 km/h</text>
+                                <rect x="20" y="72" width="30" height="20" fill="#4CAF50"/>
+                                <text x="58" y="87" font-size="10" fill="#333">Ec</text>
+                                <rect x="190" y="30" width="42" height="18" rx="4" fill="#f5576c"/>
+                                <text x="211" y="24" font-size="10" fill="#333" text-anchor="middle">80 km/h</text>
+                                <rect x="190" y="72" width="120" height="20" fill="#4CAF50"/>
+                                <text x="211" y="118" font-size="12" fill="#f5576c" text-anchor="middle">v dobra → Ec quadruplica</text>
+                            </svg>
+                            <p>Um carro passa de 40 para 80 km/h — o dobro da velocidade. A energia numa batida também fica só o dobro?</p>
+                            <p style="color: #999; margin-top: 15px;">👆 Clique para pensar</p>
+                            <span class="points-badge">15 pontos</span>
+                        </div>
+                        <div class="flashcard-back">
+                            <h3>💡 Quadruplica!</h3>
+                            <span class="card-why">A energia cinética depende do quadrado da velocidade — dobrar v multiplica a energia por 4.</span>
+                            <p>Como Ec = m·v²/2, se v vira 2v, então v² vira 4v². Por isso o dobro da velocidade é muito mais perigoso do que parece: a energia a dissipar numa colisão quadruplica.</p>
+                            <div class="card-formula">Ec = m · v² / 2 &nbsp;·&nbsp; SI: J</div>
+                            <div class="card-warning">⚠️ Erro comum: achar que velocidade e energia crescem juntas na mesma proporção.</div>
+                            <span class="points-badge">+15 pontos ganhos!</span>
+                        </div>
+                    </div>
+
+                    <div class="flashcard" onclick="flipCard(this)">
+                        <div class="flashcard-front">
+                            <h3>Card 9: Energia Potencial</h3>
+                            <svg class="card-figure" viewBox="0 0 320 140" xmlns="http://www.w3.org/2000/svg">
+                                <line x1="40" y1="30" x2="200" y2="30" stroke="#8d6e63" stroke-width="4"/>
+                                <line x1="40" y1="108" x2="200" y2="108" stroke="#8d6e63" stroke-width="4"/>
+                                <rect x="60" y="14" width="16" height="16" fill="#f5576c"/>
+                                <rect x="150" y="92" width="16" height="16" fill="#667eea"/>
+                                <line x1="20" y1="130" x2="300" y2="130" stroke="#333" stroke-width="2"/>
+                                <line x1="90" y1="30" x2="90" y2="130" stroke="#4CAF50" stroke-width="2" stroke-dasharray="4 3"/>
+                                <text x="96" y="82" font-size="10" fill="#2e7d32">h maior</text>
+                                <line x1="176" y1="108" x2="176" y2="130" stroke="#4CAF50" stroke-width="2" stroke-dasharray="4 3"/>
+                                <text x="182" y="124" font-size="10" fill="#2e7d32">h menor</text>
+                                <text x="255" y="70" font-size="13" fill="#2e7d32" text-anchor="middle">Ep = mgh</text>
+                            </svg>
+                            <p>Dois livros idênticos na estante: um na 1ª prateleira, outro na 4ª. Qual tem mais energia "guardada", e de onde ela veio?</p>
+                            <p style="color: #999; margin-top: 15px;">👆 Clique para pensar</p>
+                            <span class="points-badge">15 pontos</span>
+                        </div>
+                        <div class="flashcard-back">
+                            <h3>💡 O mais alto</h3>
+                            <span class="card-why">Quanto maior a altura, maior a energia potencial gravitacional — e ela veio do trabalho de levantar o livro.</span>
+                            <p>Ep = m·g·h cresce com a altura. Essa energia ficou "armazenada" pela posição: se o livro cair, ela se transforma em energia cinética.</p>
+                            <div class="card-formula">Ep = m · g · h &nbsp;·&nbsp; g ≈ 9,8 m/s²</div>
+                            <div class="card-warning">⚠️ Erro comum: achar que um objeto parado não tem energia. Ele pode ter muita — guardada na altura.</div>
+                            <span class="points-badge">+15 pontos ganhos!</span>
+                        </div>
+                    </div>
+
+                    <div class="flashcard" onclick="flipCard(this)">
+                        <div class="flashcard-front">
+                            <h3>Card 10: Conservação de Energia</h3>
+                            <svg class="card-figure" viewBox="0 0 320 150" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="160" cy="16" r="4" fill="#333"/>
+                                <line x1="160" y1="16" x2="72" y2="92" stroke="#bbb" stroke-width="1.5"/>
+                                <line x1="160" y1="16" x2="248" y2="92" stroke="#bbb" stroke-width="1.5"/>
+                                <line x1="160" y1="16" x2="160" y2="120" stroke="#667eea" stroke-width="2"/>
+                                <circle cx="72" cy="92" r="10" fill="#f5576c" opacity="0.5"/>
+                                <text x="72" y="74" font-size="9" fill="#c62828" text-anchor="middle">só Ep</text>
+                                <circle cx="248" cy="92" r="10" fill="#f5576c" opacity="0.5"/>
+                                <text x="248" y="74" font-size="9" fill="#c62828" text-anchor="middle">só Ep</text>
+                                <circle cx="160" cy="120" r="11" fill="#4CAF50"/>
+                                <text x="160" y="142" font-size="10" fill="#2e7d32" text-anchor="middle">embaixo: máx. Ec (mais rápido)</text>
+                            </svg>
+                            <p>Um pêndulo sobe do outro lado quase à mesma altura. No ponto mais baixo, onde ele está mais veloz, para onde foi a energia da altura?</p>
+                            <p style="color: #999; margin-top: 15px;">👆 Clique para pensar</p>
+                            <span class="points-badge">15 pontos</span>
+                        </div>
+                        <div class="flashcard-back">
+                            <h3>💡 Não sumiu — se transformou</h3>
+                            <span class="card-why">A energia potencial do alto virou energia cinética embaixo. A soma das duas permanece constante.</span>
+                            <p>No ponto mais baixo, quase tudo é Ec (por isso é o mais rápido). Ao subir, a Ec vira Ep de novo. No mundo real, o atrito converte parte em calor, e por isso o pêndulo vai parando aos poucos.</p>
+                            <div class="card-formula">Ep + Ec = constante (sistema isolado)</div>
+                            <div class="card-warning">⚠️ Erro comum: achar que a energia "acaba" ou "some". Ela só muda de forma.</div>
+                            <span class="points-badge">+15 pontos ganhos!</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- SIMULAÇÕES PAGE -->
+        <div id="simulacoes" class="page">
+            <div class="card">
+                <h2>🔬 Simulações Interativas</h2>
+                <p style="font-size: 1.15em; margin-bottom: 30px;">Explore as simulações interativas e ganhe 15 pontos por cada!</p>
+            </div>
+            
+            <div class="simulation-grid">
+                <div class="simulation-card">
+                    <h3>🎯 Lançamento de Projétil</h3>
+                    <p>Ajuste o ângulo e velocidade inicial. Veja a trajetória parabólica em tempo real!</p>
+                    <button class="sim-btn" onclick="openSimulationLocal('projectile', 0)">Abrir Simulação</button>
+                    <span class="points-badge" style="margin-top: 15px;">15 pontos</span>
+                </div>
+                
+                <div class="simulation-card">
+                    <h3>💪 Forças e Movimento</h3>
+                    <p>Aplique forças em um bloco e veja como ele acelera segundo a 2ª Lei de Newton!</p>
+                    <button class="sim-btn" onclick="openSimulationLocal('forces', 1)">Abrir Simulação</button>
+                    <span class="points-badge" style="margin-top: 15px;">15 pontos</span>
+                </div>
+                
+                <div class="simulation-card">
+                    <h3>⚡ Energia e Movimento</h3>
+                    <p>Veja a transformação entre energia cinética e potencial em uma rampa!</p>
+                    <button class="sim-btn" onclick="openSimulationLocal('energy', 2)">Abrir Simulação</button>
+                    <span class="points-badge" style="margin-top: 15px;">15 pontos</span>
+                </div>
+                
+                <div class="simulation-card">
+                    <h3>⏱️ Movimento Uniformemente Variado</h3>
+                    <p>Observe os gráficos de posição, velocidade e aceleração em tempo real!</p>
+                    <button class="sim-btn" onclick="openSimulationLocal('mruv', 3)">Abrir Simulação</button>
+                    <span class="points-badge" style="margin-top: 15px;">15 pontos</span>
+                </div>
+                
+                <div class="simulation-card">
+                    <h3>💥 Colisões</h3>
+                    <p>Experimente colisões elásticas e inelásticas. Veja a conservação de momento!</p>
+                    <button class="sim-btn" onclick="openSimulationLocal('collision', 4)">Abrir Simulação</button>
+                    <span class="points-badge" style="margin-top: 15px;">15 pontos</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Modal para Simulações -->
+        <div id="simModal" class="modal">
+            <div class="modal-content">
+                <button class="modal-close" onclick="closeSimulation()">✕ Fechar Simulação</button>
+                
+                <!-- Simulação 1: Lançamento de Projétil -->
+                <div id="sim-projectile" class="sim-container" style="display: none;">
+                    <h2 style="color: white; margin-bottom: 20px;">🎯 Lançamento de Projétil</h2>
+                    <div style="background: white; padding: 20px; border-radius: 15px;">
+                        <div style="margin-bottom: 15px;">
+                            <label style="font-weight: bold;">Ângulo: <span id="angleValue">45</span>°</label><br>
+                            <input type="range" id="angleSlider" min="0" max="90" value="45" style="width: 100%;">
+                        </div>
+                        <div style="margin-bottom: 15px;">
+                            <label style="font-weight: bold;">Velocidade Inicial: <span id="velocityValue">20</span> m/s</label><br>
+                            <input type="range" id="velocitySlider" min="5" max="50" value="20" style="width: 100%;">
+                        </div>
+                        <button onclick="launchProjectile()" style="background: #4CAF50; color: white; border: none; padding: 12px 30px; border-radius: 8px; cursor: pointer; font-size: 16px; font-weight: bold;">🚀 Lançar!</button>
+                        <button onclick="resetProjectile()" style="background: #f44336; color: white; border: none; padding: 12px 30px; border-radius: 8px; cursor: pointer; font-size: 16px; font-weight: bold; margin-left: 10px;">↺ Resetar</button>
+                        <canvas id="projectileCanvas" width="800" height="400" style="border: 2px solid #667eea; margin-top: 20px; border-radius: 10px; display: block; max-width: 100%; height: auto;"></canvas>
+                        <div id="projectileStats" style="margin-top: 15px; font-size: 14px; color: #333;"></div>
+                    </div>
+                </div>
+                
+                <!-- Simulação 2: Forças -->
+                <div id="sim-forces" class="sim-container" style="display: none;">
+                    <h2 style="color: white; margin-bottom: 20px;">💪 Forças e Movimento (F = ma)</h2>
+                    <div style="background: white; padding: 20px; border-radius: 15px;">
+                        <div style="margin-bottom: 15px;">
+                            <label style="font-weight: bold;">Força Aplicada: <span id="forceValue">50</span> N</label><br>
+                            <input type="range" id="forceSlider" min="0" max="200" value="50" style="width: 100%;">
+                        </div>
+                        <div style="margin-bottom: 15px;">
+                            <label style="font-weight: bold;">Massa do Objeto: <span id="massValue">10</span> kg</label><br>
+                            <input type="range" id="massSlider" min="1" max="50" value="10" style="width: 100%;">
+                        </div>
+                        <button onclick="applyForce()" style="background: #4CAF50; color: white; border: none; padding: 12px 30px; border-radius: 8px; cursor: pointer; font-size: 16px; font-weight: bold;">▶ Aplicar Força</button>
+                        <button onclick="resetForces()" style="background: #f44336; color: white; border: none; padding: 12px 30px; border-radius: 8px; cursor: pointer; font-size: 16px; font-weight: bold; margin-left: 10px;">↺ Resetar</button>
+                        <canvas id="forcesCanvas" width="800" height="400" style="border: 2px solid #667eea; margin-top: 20px; border-radius: 10px; display: block; max-width: 100%; height: auto;"></canvas>
+                        <div id="forcesStats" style="margin-top: 15px; font-size: 14px; color: #333;"></div>
+                    </div>
+                </div>
+                
+                <!-- Simulação 3: Energia -->
+                <div id="sim-energy" class="sim-container" style="display: none;">
+                    <h2 style="color: white; margin-bottom: 20px;">⚡ Conservação de Energia</h2>
+                    <div style="background: white; padding: 20px; border-radius: 15px;">
+                        <div style="margin-bottom: 15px;">
+                            <label style="font-weight: bold;">Altura Inicial: <span id="heightValue">20</span> m</label><br>
+                            <input type="range" id="heightSlider" min="5" max="35" value="20" step="1" style="width: 100%;">
+                        </div>
+                        <button onclick="dropBall()" style="background: #4CAF50; color: white; border: none; padding: 12px 30px; border-radius: 8px; cursor: pointer; font-size: 16px; font-weight: bold;">⬇ Soltar Bola</button>
+                        <button onclick="resetEnergy()" style="background: #f44336; color: white; border: none; padding: 12px 30px; border-radius: 8px; cursor: pointer; font-size: 16px; font-weight: bold; margin-left: 10px;">↺ Resetar</button>
+                        <canvas id="energyCanvas" width="800" height="400" style="border: 2px solid #667eea; margin-top: 20px; border-radius: 10px; display: block; max-width: 100%; height: auto;"></canvas>
+                        <div id="energyStats" style="margin-top: 15px; font-size: 14px; color: #333;"></div>
+                    </div>
+                </div>
+                
+                <!-- Simulação 4: MRUV -->
+                <div id="sim-mruv" class="sim-container" style="display: none;">
+                    <h2 style="color: white; margin-bottom: 20px;">⏱️ Movimento Uniformemente Variado</h2>
+                    <div style="background: white; padding: 20px; border-radius: 15px;">
+                        <div style="margin-bottom: 15px;">
+                            <label style="font-weight: bold;">Aceleração: <span id="accelValue">2</span> m/s²</label><br>
+                            <input type="range" id="accelSlider" min="-5" max="5" value="2" step="0.5" style="width: 100%;">
+                        </div>
+                        <button onclick="startMRUV()" style="background: #4CAF50; color: white; border: none; padding: 12px 30px; border-radius: 8px; cursor: pointer; font-size: 16px; font-weight: bold;">▶ Iniciar</button>
+                        <button onclick="resetMRUV()" style="background: #f44336; color: white; border: none; padding: 12px 30px; border-radius: 8px; cursor: pointer; font-size: 16px; font-weight: bold; margin-left: 10px;">↺ Resetar</button>
+                        <canvas id="mruvCanvas" width="800" height="400" style="border: 2px solid #667eea; margin-top: 20px; border-radius: 10px; display: block; max-width: 100%; height: auto;"></canvas>
+                        <div id="mruvStats" style="margin-top: 15px; font-size: 14px; color: #333;"></div>
+                    </div>
+                </div>
+                
+                <!-- Simulação 5: Colisões -->
+                <div id="sim-collision" class="sim-container" style="display: none;">
+                    <h2 style="color: white; margin-bottom: 20px;">💥 Colisões e Momento</h2>
+                    <div style="background: white; padding: 20px; border-radius: 15px;">
+                        <div style="margin-bottom: 15px;">
+                            <label><input type="radio" name="collisionType" value="elastic" checked> Colisão Elástica (energia conservada)</label><br>
+                            <label><input type="radio" name="collisionType" value="inelastic"> Colisão Inelástica (energia perdida)</label>
+                        </div>
+                        <button onclick="startCollision()" style="background: #4CAF50; color: white; border: none; padding: 12px 30px; border-radius: 8px; cursor: pointer; font-size: 16px; font-weight: bold;">▶ Iniciar Colisão</button>
+                        <button onclick="resetCollision()" style="background: #f44336; color: white; border: none; padding: 12px 30px; border-radius: 8px; cursor: pointer; font-size: 16px; font-weight: bold; margin-left: 10px;">↺ Resetar</button>
+                        <canvas id="collisionCanvas" width="800" height="400" style="border: 2px solid #667eea; margin-top: 20px; border-radius: 10px; display: block; max-width: 100%; height: auto;"></canvas>
+                        <div id="collisionStats" style="margin-top: 15px; font-size: 14px; color: #333;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- DESAFIOS PAGE -->
+        <div id="desafios" class="page">
+            <div class="card">
+                <h2>🎯 Desafios e Quizzes de Física</h2>
+                <p style="font-size: 1.15em; margin-bottom: 20px;">Escolha o nível de dificuldade e teste seus conhecimentos!</p>
+                
+                <div style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); padding: 20px; border-radius: 15px; color: white; margin-bottom: 20px;">
+                    <h3 style="margin: 0 0 10px 0;">💡 Como Funciona:</h3>
+                    <p style="margin: 5px 0;">🟢 <strong>Fácil:</strong> Conceitos básicos - 10 pontos por questão</p>
+                    <p style="margin: 5px 0;">🟡 <strong>Médio:</strong> Aplicação de fórmulas - 20 pontos por questão</p>
+                    <p style="margin: 5px 0;">🔴 <strong>Difícil:</strong> Problemas complexos - 30 pontos por questão</p>
+                </div>
+                
+                <div class="topic-tabs">
+                    <div class="topic-tab active" onclick="showDesafioLevel('facil')">🟢 Fácil</div>
+                    <div class="topic-tab" onclick="showDesafioLevel('medio')">🟡 Médio</div>
+                    <div class="topic-tab" onclick="showDesafioLevel('dificil')">🔴 Difícil</div>
+                    <div class="topic-tab" onclick="showDesafioLevel('semanal')">💎 Desafio Semanal</div>
+                </div>
+            </div>
+            
+            <!-- DESAFIOS 🟢 DESAFIOS NÍVEL FÁCIL -->
+            <div id="desafio-facil" class="desafio-level-content">
+                <div class="card" style="background: linear-gradient(135deg, #4CAF50 0%, #8BC34A 100%); color: white;">
+                    <h2 style="color: white;">🟢 Desafios Nível Fácil</h2>
+                    <p style="font-size: 1.1em;">5 questões sorteadas de um banco de 10 — sorteadas automaticamente a cada visita. 10 pontos por acerto.</p>
+                </div>
+                <div id="quiz-holder-facil"></div>
+            </div>
+            <!-- DESAFIOS 🟡 DESAFIOS NÍVEL MÉDIO -->
+            <div id="desafio-medio" class="desafio-level-content" style="display: none;">
+                <div class="card" style="background: linear-gradient(135deg, #FF9800 0%, #FFC107 100%); color: white;">
+                    <h2 style="color: white;">🟡 Desafios Nível Médio</h2>
+                    <p style="font-size: 1.1em;">5 questões sorteadas de um banco de 10 — sorteadas automaticamente a cada visita. 20 pontos por acerto.</p>
+                </div>
+                <div id="quiz-holder-medio"></div>
+            </div>
+            <!-- DESAFIOS 🔴 DESAFIOS NÍVEL DIFÍCIL -->
+            <div id="desafio-dificil" class="desafio-level-content" style="display: none;">
+                <div class="card" style="background: linear-gradient(135deg, #f44336 0%, #ff7043 100%); color: white;">
+                    <h2 style="color: white;">🔴 Desafios Nível Difícil</h2>
+                    <p style="font-size: 1.1em;">5 questões sorteadas de um banco de 10 — sorteadas automaticamente a cada visita. 30 pontos por acerto.</p>
+                </div>
+                <div id="quiz-holder-dificil"></div>
+            </div>
+            <!-- DESAFIO SEMANAL -->
+            <div id="desafio-semanal" class="desafio-level-content" style="display: none;">
+                <div id="semanal-holder"></div>
+            </div>
+        </div>
+        <div id="desafios" class="page">
+            <div class="card">
+                <h2>🎯 Desafios de Física</h2>
+                <p style="font-size: 1.15em; margin-bottom: 30px;">Teste seus conhecimentos e ganhe pontos!</p>
+            </div>
+            
+            <div class="quiz-card">
+                <h3>Quiz 1: Cinemática Básica</h3>
+                <p><strong>Pergunta:</strong> Um carro percorre 100 km em 2 horas. Qual sua velocidade média?</p>
+                
+                <div class="quiz-option" onclick="checkAnswer(this, false, 0)">
+                    a) 25 km/h
+                </div>
+                <div class="quiz-option" onclick="checkAnswer(this, true, 0)">
+                    b) 50 km/h
+                </div>
+                <div class="quiz-option" onclick="checkAnswer(this, false, 0)">
+                    c) 100 km/h
+                </div>
+                <div class="quiz-option" onclick="checkAnswer(this, false, 0)">
+                    d) 200 km/h
+                </div>
+                <span class="points-badge" style="margin-top: 15px;">20 pontos</span>
+            </div>
+            
+            <div class="quiz-card">
+                <h3>Quiz 2: Leis de Newton</h3>
+                <p><strong>Pergunta:</strong> Qual lei explica por que sentimos um "tranco" quando o ônibus freia?</p>
+                
+                <div class="quiz-option" onclick="checkAnswer(this, true, 1)">
+                    a) 1ª Lei (Inércia)
+                </div>
+                <div class="quiz-option" onclick="checkAnswer(this, false, 1)">
+                    b) 2ª Lei
+                </div>
+                <div class="quiz-option" onclick="checkAnswer(this, false, 1)">
+                    c) 3ª Lei
+                </div>
+                <div class="quiz-option" onclick="checkAnswer(this, false, 1)">
+                    d) Lei da Gravitação
+                </div>
+                <span class="points-badge" style="margin-top: 15px;">20 pontos</span>
+            </div>
+
+            <div class="quiz-card">
+                <h3>Quiz 3: Energia</h3>
+                <p><strong>Pergunta:</strong> Se dobrarmos a velocidade de um objeto, sua energia cinética:</p>
+                
+                <div class="quiz-option" onclick="checkAnswer(this, false, 2)">
+                    a) Dobra
+                </div>
+                <div class="quiz-option" onclick="checkAnswer(this, false, 2)">
+                    b) Triplica
+                </div>
+                <div class="quiz-option" onclick="checkAnswer(this, true, 2)">
+                    c) Quadruplica
+                </div>
+                <div class="quiz-option" onclick="checkAnswer(this, false, 2)">
+                    d) Permanece a mesma
+                </div>
+                <span class="points-badge" style="margin-top: 15px;">20 pontos</span>
+            </div>
+            
+            <div class="card" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
+                <h2 style="color: white;">🏆 Desafio Semanal</h2>
+                <h3 style="margin-bottom: 15px; color: #fff;">O Mistério da Velocidade</h3>
+                <p style="margin-bottom: 10px; font-size: 1.1em;"><strong>Problema:</strong> Um carro parte do repouso e atinge 72 km/h em 10 segundos.</p>
+                <p style="margin-bottom: 20px; font-size: 1.05em;">Calcule:</p>
+                <p style="margin-left: 20px;">a) A aceleração em m/s²</p>
+                <p style="margin-left: 20px; margin-bottom: 20px;">b) A distância percorrida</p>
+                <p style="font-size: 0.95em; opacity: 0.9;">💡 Dica: Primeiro converta 72 km/h para m/s!</p>
+                <span class="points-badge" style="margin-top: 15px; background: white; color: #667eea;">💎 100 pontos</span>
+            </div>
+        </div>
+        
+        <!-- CONQUISTAS PAGE -->
+        <div id="conquistas" class="page">
+            <div class="card">
+                <h2>🏆 Suas Conquistas</h2>
+                <p style="font-size: 1.15em; margin-bottom: 30px;">Desbloqueie badges conforme você avança!</p>
+                
+                <div class="badge-grid">
+                    <div class="badge-item unlocked">
+                        <div class="badge-icon">🏆</div>
+                        <h4>Primeiro Passo</h4>
+                        <p>Complete seu primeiro flash card</p>
+                        <small style="color: #4CAF50; font-weight: bold;">✓ DESBLOQUEADO</small>
+                    </div>
+                    
+                    <div class="badge-item locked">
+                        <div class="badge-icon">📚</div>
+                        <h4>Estudante Dedicado</h4>
+                        <p>Complete 5 flash cards</p>
+                        <small>Complete mais cards</small>
+                    </div>
+                    
+                    <div class="badge-item locked">
+                        <div class="badge-icon">🎓</div>
+                        <h4>Mestre dos Cards</h4>
+                        <p>Complete todos os 10 flash cards</p>
+                        <small>0 / 10 completos</small>
+                    </div>
+                    
+                    <div class="badge-item locked">
+                        <div class="badge-icon">🔬</div>
+                        <h4>Explorador Virtual</h4>
+                        <p>Use sua primeira simulação</p>
+                        <small>0 / 1 simulação</small>
+                    </div>
+                    
+                    <div class="badge-item locked">
+                        <div class="badge-icon">🧪</div>
+                        <h4>Cientista Experimental</h4>
+                        <p>Explore todas as 5 simulações</p>
+                        <small>0 / 5 simulações</small>
+                    </div>
+                    
+                    <div class="badge-item locked">
+                        <div class="badge-icon">🎯</div>
+                        <h4>Quiz Master</h4>
+                        <p>Acerte 10 questões</p>
+                        <small>Teste seus conhecimentos!</small>
+                    </div>
+                    
+                    <div class="badge-item locked">
+                        <div class="badge-icon">⚡</div>
+                        <h4>Einstein Junior</h4>
+                        <p>Atinja 500 pontos totais</p>
+                        <small>0 / 500 pontos</small>
+                    </div>
+                    
+                    <div class="badge-item locked">
+                        <div class="badge-icon">💎</div>
+                        <h4>Mestre da Física</h4>
+                        <p>Atinja 600 pontos totais</p>
+                        <small>Missão épica!</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Sons de Feedback
+        const sounds = {
+            correct: function() {
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                
+                oscillator.frequency.value = 523.25; // Dó
+                oscillator.type = 'sine';
+                
+                gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
+                
+                oscillator.start(audioContext.currentTime);
+                oscillator.stop(audioContext.currentTime + 0.5);
+                
+                // Segunda nota
+                setTimeout(() => {
+                    const osc2 = audioContext.createOscillator();
+                    const gain2 = audioContext.createGain();
+                    osc2.connect(gain2);
+                    gain2.connect(audioContext.destination);
+                    osc2.frequency.value = 659.25; // Mi
+                    osc2.type = 'sine';
+                    gain2.gain.setValueAtTime(0.3, audioContext.currentTime);
+                    gain2.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
+                    osc2.start(audioContext.currentTime);
+                    osc2.stop(audioContext.currentTime + 0.3);
+                }, 100);
+            },
+            
+            incorrect: function() {
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                
+                oscillator.frequency.value = 200;
+                oscillator.type = 'sawtooth';
+                
+                gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.4);
+                
+                oscillator.start(audioContext.currentTime);
+                oscillator.stop(audioContext.currentTime + 0.4);
+            },
+            
+            badge: function() {
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                
+                // Toca uma sequência ascendente
+                [261.63, 329.63, 392.00, 523.25].forEach((freq, i) => {
+                    setTimeout(() => {
+                        const osc = audioContext.createOscillator();
+                        const gain = audioContext.createGain();
+                        osc.connect(gain);
+                        gain.connect(audioContext.destination);
+                        osc.frequency.value = freq;
+                        osc.type = 'sine';
+                        gain.gain.setValueAtTime(0.2, audioContext.currentTime);
+                        gain.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
+                        osc.start(audioContext.currentTime);
+                        osc.stop(audioContext.currentTime + 0.3);
+                    }, i * 100);
+                });
+            },
+            
+            points: function() {
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                
+                oscillator.frequency.value = 800;
+                oscillator.type = 'square';
+                
+                gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.2);
+                
+                oscillator.start(audioContext.currentTime);
+                oscillator.stop(audioContext.currentTime + 0.2);
+            }
+        };
+        
+        // Efeito de confetti
+        function createConfetti() {
+            const colors = ['#f093fb', '#f5576c', '#667eea', '#764ba2', '#4CAF50', '#FF9800'];
+            for (let i = 0; i < 50; i++) {
+                setTimeout(() => {
+                    const confetti = document.createElement('div');
+                    confetti.className = 'confetti-piece';
+                    confetti.style.left = Math.random() * 100 + 'vw';
+                    confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+                    confetti.style.animationDelay = Math.random() * 0.3 + 's';
+                    confetti.style.animationDuration = (Math.random() * 2 + 2) + 's';
+                    document.body.appendChild(confetti);
+                    
+                    setTimeout(() => confetti.remove(), 3000);
+                }, i * 30);
+            }
+        }
+        
+        // Sistema de pontuação e dados do usuário
+        let userData = {
+            nome: '',
+            email: '',
+            turma: '',
+            points: 0,
+            cardsFlipped: [],
+            simsExplored: [],
+            quizzesAnswered: [],
+            badges: ['primeiro_passo'],
+            lastAccess: new Date().toISOString(),
+            startDate: new Date().toISOString()
+        };
+        
+        // Carregar dados salvos
+        function loadUserData() {
+            const saved = localStorage.getItem('fisicaDinamicaUser');
+            if (saved) {
+                userData = JSON.parse(saved);
+                updateDisplay();
+            } else {
+                showLoginModal();
+            }
+        }
+        
+        // Salvar dados (COM envio automático para Google Sheets)
+        function saveUserData() {
+            userData.lastAccess = new Date().toISOString();
+            
+            // Salva no navegador (backup local)
+            localStorage.setItem('fisicaDinamicaUser', JSON.stringify(userData));
+            
+            // 🚀 ENVIA AUTOMATICAMENTE para Google Sheets
+            autoSyncSheets();
+        }
+        
+        // 🔥 ENVIO AUTOMÁTICO para Google Sheets (baseado na solução do Gemini)
+        function autoSyncSheets() {
+            const scriptURL = 'https://script.google.com/macros/s/AKfycbxE8gSrOGD4hUzUxu5vvNKiVdPyJPrMBe7T9vWaZefc-Mq8WFj0SFBC0bN7Ru8juMTr/exec';
+            
+            // Prepara os dados
+            const payload = {
+                timestamp: new Date().toLocaleString('pt-BR'),
+                nome: userData.nome || 'Não informado',
+                email: userData.email || 'nao@informado.com',
+                turma: userData.turma || 'Não informada',
+                pontos: userData.points || 0,
+                cardsCompletos: userData.cardsFlipped.length || 0,
+                simulacoesUsadas: userData.simsExplored.length || 0,
+                quizzesCompletos: userData.quizzesAnswered.length || 0,
+                badges: userData.badges.join(', ') || 'nenhum',
+                ultimoAcesso: userData.lastAccess,
+                dataInicio: userData.startDate
+            };
+            
+            // Envia usando fetch com no-cors (solução do Gemini)
+            fetch(scriptURL, {
+                method: 'POST',
+                mode: 'no-cors', // Permite que a requisição seja enviada mesmo com redirecionamento
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(payload)
+            })
+            .then(() => {
+                console.log('✅ Dados sincronizados automaticamente com Google Sheets!');
+                console.log('📊 Dados enviados:', payload);
+            })
+            .catch(error => {
+                console.error('⚠️ Erro ao sincronizar:', error);
+            });
+        }
+        
+        // Modal de Login/Cadastro
+        function showLoginModal() {
+            const modal = document.createElement('div');
+            modal.style.cssText = 'position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 2000; display: flex; align-items: center; justify-content: center;';
+            modal.innerHTML = `
+                <div style="background: white; padding: 40px; border-radius: 20px; max-width: 500px; width: 90%;">
+                    <h2 style="color: #667eea; margin-bottom: 20px;">🎮 Bem-vindo ao Física Dinâmica!</h2>
+                    <p style="margin-bottom: 25px;">Para começar, precisamos de algumas informações:</p>
+                    
+                    <div style="margin-bottom: 15px;">
+                        <label style="font-weight: bold; display: block; margin-bottom: 5px;">Nome Completo:</label>
+                        <input type="text" id="userName" style="width: 100%; padding: 12px; border: 2px solid #667eea; border-radius: 8px; font-size: 16px;">
+                    </div>
+                    
+                    <div style="margin-bottom: 15px;">
+                        <label style="font-weight: bold; display: block; margin-bottom: 5px;">Email:</label>
+                        <input type="email" id="userEmail" style="width: 100%; padding: 12px; border: 2px solid #667eea; border-radius: 8px; font-size: 16px;">
+                    </div>
+                    
+                    <div style="margin-bottom: 25px;">
+                        <label style="font-weight: bold; display: block; margin-bottom: 5px;">Turma:</label>
+                        <input type="text" id="userTurma" placeholder="Ex: 1º Ano A" style="width: 100%; padding: 12px; border: 2px solid #667eea; border-radius: 8px; font-size: 16px;">
+                    </div>
+                    
+                    <button onclick="registerUser()" style="width: 100%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; padding: 15px; border-radius: 10px; font-size: 18px; font-weight: bold; cursor: pointer;">🚀 Começar Jornada!</button>
+                    
+                    <p style="margin-top: 20px; font-size: 12px; color: #666; text-align: center;">Seus dados serão salvos para acompanhar seu progresso.</p>
+                </div>
+            `;
+            document.body.appendChild(modal);
+        }
+        
+        // Registrar usuário (ATUALIZADO - envia ao cadastrar)
+        function registerUser() {
+            const nome = document.getElementById('userName').value.trim();
+            const email = document.getElementById('userEmail').value.trim();
+            const turma = document.getElementById('userTurma').value.trim();
+            
+            if (!nome || !email || !turma) {
+                alert('Por favor, preencha todos os campos!');
+                return;
+            }
+            
+            userData.nome = nome;
+            userData.email = email;
+            userData.turma = turma;
+            userData.startDate = new Date().toISOString();
+            
+            // 🚀 Salva e envia automaticamente
+            saveUserData();
+            
+            // Remove modal
+            document.querySelector('div[style*="z-index: 2000"]').remove();
+            
+            alert(`🎉 Bem-vindo(a), ${nome}! Seus dados serão salvos automaticamente!`);
+            updateDisplay();
+        }
+        
+        // Atualizar display (atualizado com perfil)
+        function updateDisplay() {
+            document.getElementById('totalPoints').textContent = userData.points + ' Pontos';
+            document.getElementById('cardsCompleted').textContent = userData.cardsFlipped.length;
+            document.getElementById('simsExplored').textContent = userData.simsExplored.length;
+            document.getElementById('quizzesCompleted').textContent = userData.quizzesAnswered.length;
+            
+            // Atualiza perfil
+            if (document.getElementById('userNameDisplay')) {
+                document.getElementById('userNameDisplay').textContent = userData.nome || '-';
+                document.getElementById('userTurmaDisplay').textContent = userData.turma || '-';
+                const startDate = userData.startDate ? new Date(userData.startDate).toLocaleDateString('pt-BR') : '-';
+                document.getElementById('userStartDisplay').textContent = startDate;
+            }
+        }
+        
+        // Enviar dados para Google Sheets
+        function sendToGoogleSheets() {
+            // URL do Google Apps Script (você vai criar isso)
+            const scriptURL = 'SUA_URL_DO_GOOGLE_APPS_SCRIPT_AQUI';
+            
+            // Dados a serem enviados
+            const data = {
+                nome: userData.nome,
+                email: userData.email,
+                turma: userData.turma,
+                pontos: userData.points,
+                cardsCompletos: userData.cardsFlipped.length,
+                simulacoesUsadas: userData.simsExplored.length,
+                quizzesCompletos: userData.quizzesAnswered.length,
+                badges: userData.badges.join(', '),
+                ultimoAcesso: userData.lastAccess,
+                dataInicio: userData.startDate
+            };
+            
+            // Envia via fetch (apenas se a URL estiver configurada)
+            if (scriptURL && scriptURL !== 'COLE_SUA_URL_AQUI') {
+                fetch(scriptURL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data)
+                }).then(() => {
+                    console.log('✅ Dados enviados para Google Sheets com sucesso!');
+                }).catch(err => {
+                    console.log('⚠️ Erro ao enviar dados:', err);
+                });
+            } else {
+                console.log('ℹ️ Google Sheets não configurado. Configure a URL do script.');
+            }
+        }
+        
+        // Exportar dados do usuário
+        function exportUserData() {
+            const dataStr = JSON.stringify(userData, null, 2);
+            const dataBlob = new Blob([dataStr], {type: 'application/json'});
+            const url = URL.createObjectURL(dataBlob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `fisica_dinamica_${userData.nome}_${new Date().toISOString().split('T')[0]}.json`;
+            link.click();
+        }
+        
+        // Resetar progresso (para testes)
+        function resetProgress() {
+            if (confirm('Tem certeza que deseja resetar TODO o seu progresso?')) {
+                localStorage.removeItem('fisicaDinamicaUser');
+                location.reload();
+            }
+        }
+        
+        // Sistema de pontuação (atualizado)
+        let points = 0;
+        let cardsFlipped = new Set();
+        let simsExplored = new Set();
+        let quizzesAnswered = new Set();
+        
+        // Inicializar ao carregar página
+        window.onload = function() {
+            loadUserData();
+            renderDesafios('facil');
+            renderDesafioSemanal();
+            carregarSemanaAtiva();
+            if (location.hash === '#admin') abrirAdmin();
+            // Atualiza badges ao carregar
+            setTimeout(() => {
+                checkBadges();
+                updateBadgesDisplay();
+            }, 500);
+        };
+        
+        // Navegação entre páginas (ATUALIZADO - envia ao mudar de página)
+        function showPage(pageId) {
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            document.getElementById(pageId).classList.add('active');
+            
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            window.scrollTo(0, 0);
+            
+            // 🚀 Salva e envia ao mudar de página
+            saveUserData();
+        }
+        
+        // Flash Cards - Navegação por tópicos
+        function showTopic(topicId) {
+            document.querySelectorAll('.topic-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            document.getElementById(topicId).classList.add('active');
+            
+            document.querySelectorAll('.topic-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            event.target.classList.add('active');
+        }
+        
+        // Quiz - Navegação por níveis
+        function showQuizLevel(level) {
+            document.querySelectorAll('.quiz-level-content').forEach(content => {
+                content.style.display = 'none';
+            });
+            document.getElementById('quiz-' + level).style.display = 'block';
+            
+            document.querySelectorAll('.topic-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            event.target.classList.add('active');
+        }
+        
+        // ============ BANCO DE DESAFIOS (estilo ENEM) ============
+        // 10 questões por nível. O site sorteia 5 e embaralha a ordem das questões
+        // E das alternativas, para o aluno não decorar a sequência nem a posição.
+        const bancoDesafios = {
+            facil: [
+                { id:'df1', tema:'Velocidade Média', enunciado:'Ana corre 8 km em 40 min em ritmo constante. Qual a velocidade média?', svg:'<svg class="quiz-figure" viewBox="0 0 300 110" xmlns="http://www.w3.org/2000/svg"><rect x="0" y="86" width="300" height="6" fill="#bbb"/><circle cx="55" cy="66" r="7" fill="#ffcc80"/><line x1="55" y1="73" x2="55" y2="86" stroke="#333" stroke-width="3"/><line x1="55" y1="77" x2="67" y2="80" stroke="#333" stroke-width="3"/><text x="25" y="104" font-size="11" fill="#333" text-anchor="start">0 km</text><text x="210" y="104" font-size="11" fill="#333" text-anchor="start">8 km · 40 min</text></svg>', opcoes:[ {t:'12 km/h', c:true}, {t:'8 km/h', c:false}, {t:'16 km/h', c:false}, {t:'20 km/h', c:false}, {t:'3,2 km/h', c:false} ] },
+                { id:'df2', tema:'MRU', enunciado:'Numa esteira de aeroporto, uma mala vai a 1,5 m/s. Quanto percorre em 20 s?', svg:'<svg class="quiz-figure" viewBox="0 0 300 110" xmlns="http://www.w3.org/2000/svg"><rect x="20" y="70" width="260" height="10" rx="5" fill="#888"/><rect x="120" y="46" width="34" height="24" rx="3" fill="#667eea"/><line x1="137" y1="38" x2="137" y2="30" stroke="#333" stroke-width="2"/><line x1="160" y1="58" x2="212" y2="58" stroke="#2196F3" stroke-width="4"/><polygon points="212,58 202,64 202,52" fill="#2196F3"/><text x="176" y="50" font-size="11" fill="#2196F3" text-anchor="start">1,5 m/s</text><text x="150" y="104" font-size="11" fill="#333" text-anchor="middle">esteira · tempo = 20 s</text></svg>', opcoes:[ {t:'30 m', c:true}, {t:'21,5 m', c:false}, {t:'13,5 m', c:false}, {t:'300 m', c:false}, {t:'3 m', c:false} ] },
+                { id:'df3', tema:'Unidades', enunciado:'Empurrar uma caixa (força) e levantá-la até uma prateleira (trabalho) envolvem grandezas diferentes. No SI, a força é medida em:', svg:'<svg class="quiz-figure" viewBox="0 0 300 110" xmlns="http://www.w3.org/2000/svg"><rect x="118" y="34" width="64" height="60" rx="4" fill="#667eea"/><circle cx="150" cy="64" r="8" fill="#ffcc80"/><line x1="150" y1="40" x2="150" y2="16" stroke="#f44336" stroke-width="4"/><polygon points="150,16 156,26 144,26" fill="#f44336"/><text x="160" y="26" font-size="11" fill="#f44336" text-anchor="start">F = ?</text><text x="150" y="106" font-size="11" fill="#333" text-anchor="middle">elevador sustenta a pessoa</text></svg>', opcoes:[ {t:'Newton (N)', c:true}, {t:'Joule (J), a mesma unidade do trabalho', c:false}, {t:'Watt (W)', c:false}, {t:'Pascal (Pa)', c:false}, {t:'quilograma (kg), que mede massa', c:false} ] },
+                { id:'df4', tema:'Queda Livre', enunciado:'No vácuo, uma pena e uma bolinha de chumbo são soltas juntas da mesma altura. Sobre a queda, é correto afirmar que:', svg:'<svg class="quiz-figure" viewBox="0 0 300 110" xmlns="http://www.w3.org/2000/svg"><rect x="132" y="16" width="24" height="42" rx="4" fill="#333"/><rect x="136" y="20" width="16" height="30" rx="2" fill="#8aa0f0"/><line x1="144" y1="60" x2="144" y2="86" stroke="#f44336" stroke-width="4"/><polygon points="144,86 138,76 150,76" fill="#f44336"/><text x="154" y="78" font-size="11" fill="#f44336" text-anchor="start">g</text><text x="150" y="104" font-size="11" fill="#333" text-anchor="middle">celular em queda</text></svg>', opcoes:[ {t:'as duas caem com a mesma aceleração, de cerca de 10 m/s²', c:true}, {t:'a bolinha de chumbo cai com aceleração maior por ser mais pesada', c:false}, {t:'a pena cai mais rápido por ser mais leve', c:false}, {t:'nenhuma acelera, pois no vácuo não há gravidade', c:false}, {t:'a aceleração depende do formato de cada objeto', c:false} ] },
+                { id:'df5', tema:'Inércia', enunciado:'O ônibus freia e os passageiros vão para frente. Qual lei explica isso?', svg:'<svg class="quiz-figure" viewBox="0 0 300 110" xmlns="http://www.w3.org/2000/svg"><rect x="40" y="40" width="150" height="46" rx="8" fill="#667eea"/><rect x="52" y="50" width="26" height="20" rx="3" fill="#cfe0ff"/><circle cx="70" cy="94" r="9" fill="#333"/><circle cx="165" cy="94" r="9" fill="#333"/><circle cx="140" cy="52" r="7" fill="#ffcc80"/><line x1="140" y1="59" x2="152" y2="74" stroke="#333" stroke-width="3"/><line x1="40" y1="100" x2="72" y2="100" stroke="#ff9800" stroke-width="4"/><polygon points="72,100 62,106 62,94" fill="#ff9800"/><text x="84" y="104" font-size="11" fill="#ff9800" text-anchor="start">freia</text><text x="200" y="50" font-size="11" fill="#f5576c" text-anchor="start">corpo segue →</text></svg>', opcoes:[ {t:'1ª Lei de Newton (inércia)', c:true}, {t:'2ª Lei de Newton (F = ma)', c:false}, {t:'3ª Lei de Newton (ação e reação)', c:false}, {t:'Gravitação Universal', c:false}, {t:'Conservação da energia', c:false} ] },
+                { id:'df6', tema:'Ação e Reação', enunciado:'O nadador empurra a parede e dispara para frente. Por quê?', svg:'<svg class="quiz-figure" viewBox="0 0 300 110" xmlns="http://www.w3.org/2000/svg"><rect x="30" y="14" width="8" height="90" fill="#90caf9"/><circle cx="120" cy="50" r="8" fill="#ffcc80"/><line x1="120" y1="58" x2="120" y2="80" stroke="#333" stroke-width="4"/><line x1="60" y1="66" x2="44" y2="66" stroke="#2196F3" stroke-width="4"/><polygon points="44,66 54,60 54,72" fill="#2196F3"/><text x="50" y="58" font-size="11" fill="#2196F3" text-anchor="start">nadador empurra</text><line x1="130" y1="66" x2="175" y2="66" stroke="#f5576c" stroke-width="4"/><polygon points="175,66 165,72 165,60" fill="#f5576c"/><text x="140" y="58" font-size="11" fill="#f5576c" text-anchor="start">reação →</text></svg>', opcoes:[ {t:'A parede reage empurrando o nadador com força de mesma intensidade', c:true}, {t:'A água puxa o nadador', c:false}, {t:'A inércia empurra o nadador', c:false}, {t:'A gravidade impulsiona o nadador', c:false}, {t:'Nenhuma força atua sobre ele', c:false} ] },
+                { id:'df7', tema:'Energia Potencial', enunciado:'Um reservatório cheio no alto de um prédio armazena energia:', svg:'<svg class="quiz-figure" viewBox="0 0 300 110" xmlns="http://www.w3.org/2000/svg"><rect x="120" y="30" width="60" height="70" fill="#90a4ae"/><rect x="126" y="16" width="48" height="18" rx="2" fill="#2196F3"/><line x1="150" y1="34" x2="150" y2="100" stroke="#4CAF50" stroke-width="2" stroke-dasharray="4 3"/><text x="156" y="70" font-size="11" fill="#2e7d32" text-anchor="start">h</text><text x="150" y="108" font-size="11" fill="#333" text-anchor="middle">reservatório no alto</text></svg>', opcoes:[ {t:'energia potencial gravitacional', c:true}, {t:'energia cinética', c:false}, {t:'energia térmica', c:false}, {t:'energia elétrica', c:false}, {t:'energia sonora', c:false} ] },
+                { id:'df8', tema:'Energia Cinética', enunciado:'O vento gira as pás de um aerogerador. A energia do ar em movimento é:', svg:'<svg class="quiz-figure" viewBox="0 0 300 110" xmlns="http://www.w3.org/2000/svg"><rect x="0" y="86" width="300" height="6" fill="#bbb"/><line x1="150" y1="30" x2="150" y2="86" stroke="#607d8b" stroke-width="4"/><line x1="150" y1="30" x2="180" y2="16" stroke="#607d8b" stroke-width="3"/><line x1="150" y1="30" x2="122" y2="14" stroke="#607d8b" stroke-width="3"/><line x1="150" y1="30" x2="150" y2="0" stroke="#607d8b" stroke-width="3"/><line x1="40" y1="40" x2="80" y2="40" stroke="#2196F3" stroke-width="4"/><polygon points="80,40 70,46 70,34" fill="#2196F3"/><text x="42" y="34" font-size="11" fill="#2196F3" text-anchor="start">vento</text></svg>', opcoes:[ {t:'cinética', c:true}, {t:'potencial', c:false}, {t:'química', c:false}, {t:'nuclear', c:false}, {t:'luminosa', c:false} ] },
+                { id:'df9', tema:'Aceleração', enunciado:'No semáforo, o carro vai de 0 a 20 m/s. Nesse intervalo, ele tem:', svg:'<svg class="quiz-figure" viewBox="0 0 300 110" xmlns="http://www.w3.org/2000/svg"><rect x="0" y="86" width="300" height="6" fill="#bbb"/><rect x="60" y="24" width="14" height="40" rx="3" fill="#333"/><circle cx="67" cy="32" r="4" fill="#f44336"/><circle cx="67" cy="44" r="4" fill="#FFC107"/><circle cx="67" cy="56" r="4" fill="#4CAF50"/><rect x="150" y="60" width="46" height="20" rx="5" fill="#667eea"/><circle cx="162" cy="84" r="6" fill="#333"/><circle cx="186" cy="84" r="6" fill="#333"/><line x1="200" y1="50" x2="235" y2="50" stroke="#2196F3" stroke-width="4"/><polygon points="235,50 225,56 225,44" fill="#2196F3"/><text x="150" y="20" font-size="11" fill="#2196F3" text-anchor="start">0 → 20 m/s</text></svg>', opcoes:[ {t:'aceleração', c:true}, {t:'velocidade constante', c:false}, {t:'aceleração nula', c:false}, {t:'movimento uniforme (MRU)', c:false}, {t:'apenas inércia', c:false} ] },
+                { id:'df10', tema:'Referencial', enunciado:'Sentado num avião em voo, o passageiro está parado ou em movimento?', svg:'<svg class="quiz-figure" viewBox="0 0 300 110" xmlns="http://www.w3.org/2000/svg"><path d="M 60 60 L 210 60 L 245 50 L 210 40 L 60 40 Q 40 50 60 60 Z" fill="#90a4ae"/><circle cx="110" cy="50" r="6" fill="#ffcc80"/><line x1="20" y1="90" x2="280" y2="90" stroke="#8d6e63" stroke-width="3"/><text x="150" y="106" font-size="11" fill="#333" text-anchor="middle">avião em voo · solo abaixo</text></svg>', opcoes:[ {t:'relativo (depende do referencial)', c:true}, {t:'absoluto', c:false}, {t:'sempre de repouso', c:false}, {t:'independente do referencial', c:false}, {t:'impossível de medir', c:false} ] }
+            ],
+            medio: [
+                { id:'dm1', tema:'MRUV', enunciado:'Ao sair da estação, um metrô acelera de forma uniforme, indo de 0 a 30 m/s em 15 s. Um passageiro em pé sente-se puxado. É correto afirmar que:', svg:'<svg class="quiz-figure" viewBox="0 0 300 110" xmlns="http://www.w3.org/2000/svg"><rect x="0" y="86" width="300" height="6" fill="#bbb"/><rect x="60" y="52" width="120" height="34" rx="6" fill="#667eea"/><rect x="70" y="58" width="20" height="16" rx="2" fill="#cfe0ff"/><rect x="98" y="58" width="20" height="16" rx="2" fill="#cfe0ff"/><line x1="190" y1="68" x2="240" y2="68" stroke="#2196F3" stroke-width="4"/><polygon points="240,68 230,74 230,62" fill="#2196F3"/><text x="120" y="44" font-size="11" fill="#2196F3" text-anchor="middle">0 → 30 m/s em 15 s</text></svg>', opcoes:[ {t:'a aceleração é 2 m/s² e o passageiro tende a inclinar-se para trás, por inércia', c:true}, {t:'a aceleração é 2 m/s² e o passageiro é empurrado para frente por uma força', c:false}, {t:'a aceleração é 45 m/s², bastando multiplicar a velocidade pelo tempo', c:false}, {t:'a aceleração é nula, pois a velocidade é sempre positiva', c:false}, {t:'a aceleração é 0,5 m/s², dividindo o tempo pela velocidade', c:false} ] },
+                { id:'dm2', tema:'Energia Cinética', enunciado:'Uma bola de 0,5 kg é chutada e adquire 20 m/s. Sobre sua energia cinética, é correto afirmar que:', svg:'<svg class="quiz-figure" viewBox="0 0 300 110" xmlns="http://www.w3.org/2000/svg"><rect x="0" y="86" width="300" height="6" fill="#bbb"/><circle cx="90" cy="70" r="14" fill="#fff" stroke="#333" stroke-width="2"/><path d="M90 56 L96 66 L90 72 L84 66 Z" fill="#333"/><line x1="110" y1="70" x2="175" y2="70" stroke="#f5576c" stroke-width="4"/><polygon points="175,70 165,76 165,64" fill="#f5576c"/><text x="130" y="62" font-size="11" fill="#f5576c" text-anchor="start">20 m/s</text><text x="90" y="104" font-size="11" fill="#333" text-anchor="middle">m = 0,5 kg</text></svg>', opcoes:[ {t:'vale 100 J, pois a energia cinética depende do quadrado da velocidade', c:true}, {t:'vale 200 J, bastando multiplicar a massa pela velocidade', c:false}, {t:'vale 10 J, usando massa vezes velocidade dividido por 2', c:false}, {t:'é nula, pois a bola não está a nenhuma altura', c:false}, {t:'não pode ser calculada sem saber a altura do chute', c:false} ] },
+                { id:'dm3', tema:'2ª Lei de Newton', enunciado:'Uma força resultante de 40 N atua sobre um carrinho de 8 kg, sem atrito. É correto afirmar que:', svg:'<svg class="quiz-figure" viewBox="0 0 300 110" xmlns="http://www.w3.org/2000/svg"><rect x="0" y="86" width="300" height="6" fill="#bbb"/><rect x="60" y="56" width="46" height="30" rx="3" fill="#4CAF50"/><circle cx="72" cy="90" r="6" fill="#333"/><circle cx="96" cy="90" r="6" fill="#333"/><line x1="45" y1="66" x2="58" y2="66" stroke="#f44336" stroke-width="4"/><polygon points="58,66 48,72 48,60" fill="#f44336"/><text x="30" y="60" font-size="11" fill="#f44336" text-anchor="start">40 N</text><line x1="110" y1="66" x2="160" y2="66" stroke="#2196F3" stroke-width="4"/><polygon points="160,66 150,72 150,60" fill="#2196F3"/><text x="120" y="58" font-size="11" fill="#2196F3" text-anchor="start">a = ?</text><text x="83" y="104" font-size="11" fill="#333" text-anchor="middle">m = 8 kg</text></svg>', opcoes:[ {t:'a aceleração é 5 m/s²; com mais massa, a aceleração seria menor para a mesma força', c:true}, {t:'a aceleração é 5 m/s² e aumenta sozinha com o tempo, mesmo com força constante', c:false}, {t:'a aceleração é 320 m/s², multiplicando a força pela massa', c:false}, {t:'o carrinho se move com velocidade constante de 5 m/s', c:false}, {t:'não há aceleração, pois a força é constante', c:false} ] },
+                { id:'dm4', tema:'Energia Potencial', enunciado:'Numa obra, um saco de 20 kg é erguido a 3 m de altura (g = 10 m/s²). Sobre a energia potencial adquirida, é correto afirmar que:', svg:'<svg class="quiz-figure" viewBox="0 0 300 110" xmlns="http://www.w3.org/2000/svg"><rect x="0" y="86" width="300" height="6" fill="#bbb"/><rect x="120" y="18" width="30" height="20" rx="2" fill="#a1887f"/><line x1="135" y1="40" x2="135" y2="86" stroke="#4CAF50" stroke-width="2" stroke-dasharray="4 3"/><text x="142" y="66" font-size="11" fill="#2e7d32" text-anchor="start">3 m</text><text x="150" y="104" font-size="11" fill="#333" text-anchor="middle">saco de 20 kg erguido</text></svg>', opcoes:[ {t:'vale 600 J, e veio do trabalho feito para levantar o saco', c:true}, {t:'vale 600 J, mas desaparece assim que o saco fica parado no alto', c:false}, {t:'é nula, pois o saco está parado no alto', c:false}, {t:'vale 60 J, pois não se usa o valor de g', c:false}, {t:'vale 6000 J', c:false} ] },
+                { id:'dm5', tema:'Trabalho', enunciado:'Um trabalhador empurra uma caixa com 50 N, na direção do movimento, ao longo de 4 m. Sobre o trabalho dessa força, é correto afirmar que:', svg:'<svg class="quiz-figure" viewBox="0 0 300 110" xmlns="http://www.w3.org/2000/svg"><rect x="0" y="86" width="300" height="6" fill="#bbb"/><rect x="70" y="54" width="40" height="32" fill="#795548"/><line x1="55" y1="70" x2="68" y2="70" stroke="#f44336" stroke-width="4"/><polygon points="68,70 58,76 58,64" fill="#f44336"/><text x="40" y="64" font-size="11" fill="#f44336" text-anchor="start">50 N</text><line x1="90" y1="96" x2="210" y2="96" stroke="#4CAF50" stroke-width="2" stroke-dasharray="4 3"/><text x="140" y="92" font-size="11" fill="#2e7d32" text-anchor="start">d = 4 m</text></svg>', opcoes:[ {t:'vale 200 J, pois a força atua na mesma direção do deslocamento', c:true}, {t:'é nulo, pois a caixa acaba parando', c:false}, {t:'vale 12,5 J, dividindo a força pela distância', c:false}, {t:'vale 54 J, somando força e distância', c:false}, {t:'depende da massa da caixa, que não foi informada', c:false} ] },
+                { id:'dm6', tema:'Conversão', enunciado:'Um carro percorre 108 km em 1,5 h em velocidade constante. Sobre essa velocidade em m/s, é correto afirmar que:', svg:'<svg class="quiz-figure" viewBox="0 0 300 110" xmlns="http://www.w3.org/2000/svg"><rect x="0" y="86" width="300" height="6" fill="#bbb"/><rect x="60" y="60" width="50" height="22" rx="6" fill="#667eea"/><circle cx="74" cy="86" r="6" fill="#333"/><circle cx="98" cy="86" r="6" fill="#333"/><line x1="120" y1="70" x2="240" y2="70" stroke="#2196F3" stroke-width="4"/><polygon points="240,70 230,76 230,64" fill="#2196F3"/><text x="150" y="50" font-size="11" fill="#2196F3" text-anchor="middle">108 km em 1,5 h</text></svg>', opcoes:[ {t:'é 20 m/s, pois 108 km ÷ 1,5 h = 72 km/h e 72 ÷ 3,6 = 20 m/s', c:true}, {t:'é 72 m/s, pois km/h e m/s são equivalentes', c:false}, {t:'é 259 m/s, multiplicando 72 por 3,6', c:false}, {t:'é 30 m/s', c:false}, {t:'é 10 m/s', c:false} ] },
+                { id:'dm7', tema:'Queda Livre', enunciado:'Um objeto é abandonado do alto de um prédio e cai livremente por 2 s (g = 10 m/s², sem ar). Sobre a velocidade final, é correto afirmar que:', svg:'<svg class="quiz-figure" viewBox="0 0 300 110" xmlns="http://www.w3.org/2000/svg"><rect x="60" y="12" width="60" height="92" fill="#90a4ae" opacity="0.5"/><circle cx="150" cy="30" r="9" fill="#FF9800"/><line x1="150" y1="42" x2="150" y2="84" stroke="#f44336" stroke-width="4"/><polygon points="150,84 144,74 156,74" fill="#f44336"/><text x="158" y="66" font-size="11" fill="#f44336" text-anchor="start">t = 2 s</text></svg>', opcoes:[ {t:'é 20 m/s, pois na queda livre a velocidade cresce 10 m/s a cada segundo', c:true}, {t:'é 10 m/s, igual à gravidade, sem depender do tempo', c:false}, {t:'é constante, pois todos os corpos caem juntos', c:false}, {t:'é 5 m/s', c:false}, {t:'é 40 m/s', c:false} ] },
+                { id:'dm8', tema:'Força Peso', enunciado:'Considerando g = 10 m/s², sobre o peso de uma pessoa de 70 kg é correto afirmar que:', svg:'<svg class="quiz-figure" viewBox="0 0 300 110" xmlns="http://www.w3.org/2000/svg"><rect x="0" y="86" width="300" height="6" fill="#bbb"/><circle cx="120" cy="40" r="9" fill="#ffcc80"/><line x1="120" y1="49" x2="120" y2="74" stroke="#333" stroke-width="4"/><line x1="120" y1="56" x2="106" y2="66" stroke="#333" stroke-width="3"/><line x1="120" y1="56" x2="134" y2="66" stroke="#333" stroke-width="3"/><line x1="150" y1="50" x2="150" y2="82" stroke="#f44336" stroke-width="4"/><polygon points="150,82 144,72 156,72" fill="#f44336"/><text x="158" y="70" font-size="11" fill="#f44336" text-anchor="start">P = ?</text><text x="120" y="20" font-size="11" fill="#333" text-anchor="middle">m = 70 kg</text></svg>', opcoes:[ {t:'vale 700 N e mudaria na Lua, embora sua massa continuasse 70 kg', c:true}, {t:'vale 70 N, pois peso e massa são a mesma coisa', c:false}, {t:'vale 700 N e seria idêntico na Lua', c:false}, {t:'vale 7 N', c:false}, {t:'não pode ser calculado sem a altura', c:false} ] },
+                { id:'dm9', tema:'MRUV', enunciado:'Um avião parte do repouso e acelera a 4 m/s² por 10 s na pista. Sobre a distância até decolar, é correto afirmar que:', svg:'<svg class="quiz-figure" viewBox="0 0 300 110" xmlns="http://www.w3.org/2000/svg"><rect x="0" y="86" width="300" height="6" fill="#bbb"/><path d="M 60 70 L 150 70 L 175 62 L 150 54 L 60 54 Q 46 62 60 70 Z" fill="#90a4ae"/><line x1="185" y1="62" x2="240" y2="62" stroke="#2196F3" stroke-width="4"/><polygon points="240,62 230,68 230,56" fill="#2196F3"/><text x="120" y="44" font-size="11" fill="#2196F3" text-anchor="middle">a = 4 m/s² · 10 s</text><line x1="20" y1="86" x2="280" y2="86" stroke="#8d6e63" stroke-width="2"/></svg>', opcoes:[ {t:'é 200 m, pois partindo do repouso vale S = a·t²/2', c:true}, {t:'é 40 m, multiplicando a aceleração pelo tempo', c:false}, {t:'é 400 m, esquecendo de dividir por 2', c:false}, {t:'é 20 m', c:false}, {t:'não dá para calcular sem a velocidade final', c:false} ] },
+                { id:'dm10', tema:'Energia e Segurança', enunciado:'Uma campanha de trânsito alerta que dobrar a velocidade é mais perigoso do que parece. Se um carro passa de 10 para 20 m/s, sobre sua energia cinética é correto afirmar que:', svg:'<svg class="quiz-figure" viewBox="0 0 300 110" xmlns="http://www.w3.org/2000/svg"><rect x="20" y="24" width="40" height="16" rx="4" fill="#667eea"/><text x="40" y="20" font-size="10" fill="#333" text-anchor="middle">10 m/s</text><rect x="20" y="66" width="26" height="16" fill="#4CAF50"/><text x="56" y="80" font-size="10" fill="#333" text-anchor="start">Ec</text><rect x="180" y="24" width="40" height="16" rx="4" fill="#f5576c"/><text x="200" y="20" font-size="10" fill="#333" text-anchor="middle">20 m/s</text><rect x="180" y="66" width="104" height="16" fill="#4CAF50"/></svg>', opcoes:[ {t:'fica 4 vezes maior, pois depende do quadrado da velocidade', c:true}, {t:'fica 2 vezes maior, na mesma proporção da velocidade', c:false}, {t:'não muda, pois a massa continua a mesma', c:false}, {t:'fica 8 vezes maior', c:false}, {t:'diminui, pois o carro gasta energia para acelerar', c:false} ] }
+            ],
+            dificil: [
+                { id:'dd1', tema:'Lançamento Horizontal', enunciado:'Uma bolinha rola de uma mesa de 1,25 m e cai (g = 10 m/s², sem ar). Sobre o tempo de queda até o chão, é correto afirmar que:', dica:'Queda livre na vertical: h = g·t²/2.', svg:'<svg class="quiz-figure" viewBox="0 0 300 110" xmlns="http://www.w3.org/2000/svg"><rect x="30" y="40" width="90" height="8" fill="#8d6e63"/><rect x="34" y="48" width="8" height="52" fill="#8d6e63"/><rect x="108" y="48" width="8" height="52" fill="#8d6e63"/><circle cx="120" cy="36" r="7" fill="#FF5722"/><path d="M120 40 Q 200 60 250 100" stroke="#FF5722" stroke-width="2" fill="none" stroke-dasharray="4 3"/><line x1="20" y1="100" x2="290" y2="100" stroke="#333" stroke-width="2"/><text x="60" y="30" font-size="11" fill="#2e7d32" text-anchor="start">h = 1,25 m</text></svg>', opcoes:[ {t:'vale 0,5 s e depende só da altura, não da rapidez com que saiu da mesa', c:true}, {t:'vale 0,5 s, mas seria maior se ela saísse mais rápido da mesa', c:false}, {t:'vale 1,0 s', c:false}, {t:'vale 0,25 s', c:false}, {t:'depende da massa da bolinha', c:false} ] },
+                { id:'dd2', tema:'Força de Atrito', enunciado:'Um bloco de 10 kg desliza numa superfície horizontal com coeficiente de atrito 0,3 (g = 10 m/s²). Sobre a força de atrito, é correto afirmar que:', dica:'Fat = μ·N e N = m·g no plano horizontal.', svg:'<svg class="quiz-figure" viewBox="0 0 300 110" xmlns="http://www.w3.org/2000/svg"><rect x="0" y="86" width="300" height="6" fill="#bbb"/><rect x="90" y="56" width="60" height="30" fill="#9C27B0"/><line x1="160" y1="72" x2="215" y2="72" stroke="#2196F3" stroke-width="4"/><polygon points="215,72 205,78 205,66" fill="#2196F3"/><text x="175" y="64" font-size="11" fill="#2196F3" text-anchor="start">movimento</text><line x1="88" y1="80" x2="50" y2="80" stroke="#ff9800" stroke-width="4"/><polygon points="50,80 60,74 60,86" fill="#ff9800"/><text x="40" y="74" font-size="11" fill="#ff9800" text-anchor="start">atrito</text><text x="120" y="104" font-size="11" fill="#333" text-anchor="middle">m = 10 kg · μ = 0,3</text></svg>', opcoes:[ {t:'vale 30 N e aponta no sentido contrário ao movimento', c:true}, {t:'vale 30 N e aponta no mesmo sentido do movimento', c:false}, {t:'vale 100 N, igual à força normal', c:false}, {t:'vale 3 N', c:false}, {t:'é nula, pois a superfície é horizontal', c:false} ] },
+                { id:'dd3', tema:'Conservação de Energia', enunciado:'Num tobogã sem atrito, uma criança parte do repouso de 5 m de altura (g = 10 m/s²). Sobre a velocidade ao chegar embaixo, é correto afirmar que:', dica:'mgh = m·v²/2.', svg:'<svg class="quiz-figure" viewBox="0 0 300 110" xmlns="http://www.w3.org/2000/svg"><rect x="0" y="86" width="300" height="6" fill="#bbb"/><path d="M 40 30 Q 90 30 120 86 L 40 86 Z" fill="#b0bec5"/><circle cx="52" cy="40" r="8" fill="#FF9800"/><line x1="30" y1="30" x2="30" y2="86" stroke="#4CAF50" stroke-width="2" stroke-dasharray="4 3"/><text x="6" y="60" font-size="11" fill="#2e7d32" text-anchor="start">5 m</text><line x1="130" y1="80" x2="175" y2="80" stroke="#f5576c" stroke-width="4"/><polygon points="175,80 165,86 165,74" fill="#f5576c"/><text x="135" y="74" font-size="11" fill="#f5576c" text-anchor="start">v = ?</text></svg>', opcoes:[ {t:'vale 10 m/s e não dependeria da massa da criança', c:true}, {t:'vale 10 m/s, mas seria maior para uma criança mais pesada', c:false}, {t:'vale 5 m/s, igual à altura de partida', c:false}, {t:'vale 50 m/s', c:false}, {t:'é nula, pois a energia se conserva', c:false} ] },
+                { id:'dd4', tema:'Plano Inclinado', enunciado:'Um caixote de 4 kg está apoiado numa rampa a 30° com a horizontal (g = 10 m/s²). Sobre a componente do peso paralela à rampa, é correto afirmar que:', dica:'P∥ = m·g·sen(θ), sen 30° = 0,5.', svg:'<svg class="quiz-figure" viewBox="0 0 300 110" xmlns="http://www.w3.org/2000/svg"><path d="M 30 90 L 240 90 L 30 33 Z" fill="#cfd8dc"/><rect x="95" y="52" width="26" height="20" fill="#795548" transform="rotate(-30 108 62)"/><path d="M 60 90 A 30 30 0 0 1 68 72" stroke="#333" fill="none" stroke-width="2"/><text x="72" y="86" font-size="11" fill="#333" text-anchor="start">30°</text><line x1="120" y1="70" x2="150" y2="88" stroke="#f44336" stroke-width="4"/><polygon points="150,88 138,88 145,78" fill="#f44336"/><text x="150" y="84" font-size="11" fill="#f44336" text-anchor="start">P∥</text><text x="200" y="40" font-size="11" fill="#333" text-anchor="start">m = 4 kg</text></svg>', opcoes:[ {t:'vale 20 N e é ela que tende a fazer o caixote descer', c:true}, {t:'vale 40 N, igual ao peso total do caixote', c:false}, {t:'vale 34,6 N, usando o cosseno de 30°', c:false}, {t:'vale 4 N', c:false}, {t:'é nula, pois o caixote está apoiado', c:false} ] },
+                { id:'dd5', tema:'Colisão Inelástica', enunciado:'Um vagão de 2000 kg a 3 m/s colide e se acopla a outro idêntico, parado. Sobre a velocidade do conjunto após o acoplamento, é correto afirmar que:', dica:'Momento se conserva: m·v = (2m)·vf.', svg:'<svg class="quiz-figure" viewBox="0 0 300 110" xmlns="http://www.w3.org/2000/svg"><rect x="0" y="86" width="300" height="6" fill="#bbb"/><rect x="50" y="54" width="60" height="32" rx="3" fill="#E91E63"/><circle cx="64" cy="90" r="6" fill="#333"/><circle cx="96" cy="90" r="6" fill="#333"/><line x1="114" y1="70" x2="150" y2="70" stroke="#2196F3" stroke-width="4"/><polygon points="150,70 140,76 140,64" fill="#2196F3"/><text x="70" y="48" font-size="11" fill="#2196F3" text-anchor="start">3 m/s</text><rect x="170" y="54" width="60" height="32" rx="3" fill="#00BCD4"/><circle cx="184" cy="90" r="6" fill="#333"/><circle cx="216" cy="90" r="6" fill="#333"/><text x="200" y="48" font-size="11" fill="#333" text-anchor="middle">parado</text></svg>', opcoes:[ {t:'vale 1,5 m/s: o momento se conserva, mas a energia cinética não', c:true}, {t:'vale 1,5 m/s e a energia cinética também se conserva', c:false}, {t:'vale 3 m/s, pois a velocidade não muda', c:false}, {t:'vale 6 m/s, somando as massas', c:false}, {t:'é nula, pois os vagões param ao colidir', c:false} ] },
+                { id:'dd6', tema:'Lançamento Oblíquo', enunciado:'Um projétil é lançado a 20 m/s formando 30° com a horizontal (g = 10 m/s²). Sobre a componente vertical inicial da velocidade, é correto afirmar que:', dica:'vy = v·sen(θ), sen 30° = 0,5.', svg:'<svg class="quiz-figure" viewBox="0 0 300 110" xmlns="http://www.w3.org/2000/svg"><rect x="0" y="86" width="300" height="6" fill="#bbb"/><circle cx="50" cy="80" r="7" fill="#FF5722"/><path d="M50 80 Q 150 10 260 80" stroke="#FF5722" stroke-width="2" fill="none" stroke-dasharray="4 3"/><line x1="50" y1="80" x2="90" y2="52" stroke="#2196F3" stroke-width="4"/><polygon points="90,52 85,63 78,53" fill="#2196F3"/><text x="64" y="50" font-size="11" fill="#2196F3" text-anchor="start">20 m/s</text><path d="M 50 80 A 26 26 0 0 1 76 78" stroke="#333" fill="none" stroke-width="2"/><text x="80" y="74" font-size="11" fill="#333" text-anchor="start">30°</text></svg>', opcoes:[ {t:'vale 10 m/s (v·sen30°) e é ela que determina a altura máxima', c:true}, {t:'vale 17,3 m/s, usando o cosseno de 30°', c:false}, {t:'vale 20 m/s, igual à velocidade de lançamento', c:false}, {t:'vale 10 m/s e permanece constante durante todo o voo', c:false}, {t:'vale 5 m/s', c:false} ] },
+                { id:'dd7', tema:'Trabalho e Energia', enunciado:'Um carro de 1000 kg a 20 m/s freia até parar completamente. Sobre o trabalho da força de frenagem, é correto afirmar que:', dica:'Equivale à energia cinética perdida.', svg:'<svg class="quiz-figure" viewBox="0 0 300 110" xmlns="http://www.w3.org/2000/svg"><rect x="0" y="86" width="300" height="6" fill="#bbb"/><rect x="140" y="58" width="52" height="24" rx="6" fill="#607d8b"/><circle cx="154" cy="86" r="6" fill="#333"/><circle cx="180" cy="86" r="6" fill="#333"/><line x1="135" y1="70" x2="95" y2="70" stroke="#f44336" stroke-width="4"/><polygon points="95,70 105,64 105,76" fill="#f44336"/><text x="70" y="64" font-size="11" fill="#f44336" text-anchor="start">frenagem</text><text x="166" y="50" font-size="11" fill="#333" text-anchor="middle">20 m/s → 0</text><text x="150" y="104" font-size="11" fill="#333" text-anchor="middle">m = 1000 kg</text></svg>', opcoes:[ {t:'vale 200 000 J em módulo, igual à energia cinética que o carro tinha', c:true}, {t:'vale 20 000 J, esquecendo o quadrado da velocidade', c:false}, {t:'é nulo, pois o carro para no fim', c:false}, {t:'vale 400 000 J', c:false}, {t:'depende do tempo de frenagem, que não foi dado', c:false} ] },
+                { id:'dd8', tema:'Potência', enunciado:'Um elevador realiza 12 000 J de trabalho para erguer uma carga em 4 s. Sobre a potência desenvolvida, é correto afirmar que:', dica:'P = W / t.', svg:'<svg class="quiz-figure" viewBox="0 0 300 110" xmlns="http://www.w3.org/2000/svg"><rect x="115" y="20" width="70" height="70" rx="4" fill="#667eea"/><rect x="128" y="34" width="44" height="30" fill="#cfe0ff"/><line x1="150" y1="90" x2="150" y2="64" stroke="#4CAF50" stroke-width="4"/><polygon points="150,64 156,74 144,74" fill="#4CAF50"/><text x="150" y="104" font-size="11" fill="#333" text-anchor="middle">W = 12 000 J · t = 4 s</text></svg>', opcoes:[ {t:'vale 3000 W, medindo a rapidez com que o trabalho é feito', c:true}, {t:'vale 48 000 W, multiplicando trabalho por tempo', c:false}, {t:'vale 3000 J, pois potência e trabalho são a mesma coisa', c:false}, {t:'vale 300 W', c:false}, {t:'é o mesmo que a força aplicada', c:false} ] },
+                { id:'dd9', tema:'MRUV', enunciado:'Para ultrapassar, um carro a 10 m/s acelera a 2 m/s² durante 5 s. Sobre a velocidade final, é correto afirmar que:', dica:'v = v₀ + a·t.', svg:'<svg class="quiz-figure" viewBox="0 0 300 110" xmlns="http://www.w3.org/2000/svg"><rect x="0" y="86" width="300" height="6" fill="#bbb"/><rect x="70" y="60" width="50" height="22" rx="6" fill="#667eea"/><circle cx="84" cy="86" r="6" fill="#333"/><circle cx="108" cy="86" r="6" fill="#333"/><line x1="130" y1="70" x2="235" y2="70" stroke="#2196F3" stroke-width="4"/><polygon points="235,70 225,76 225,64" fill="#2196F3"/><text x="150" y="50" font-size="11" fill="#2196F3" text-anchor="middle">v₀ = 10 m/s · a = 2 m/s² · 5 s</text></svg>', opcoes:[ {t:'vale 20 m/s, somando à velocidade inicial o ganho a·t', c:true}, {t:'vale 10 m/s, pois a velocidade inicial não conta', c:false}, {t:'vale 100 m/s, multiplicando os três valores', c:false}, {t:'vale 15 m/s', c:false}, {t:'é nula ao fim dos 5 s', c:false} ] },
+                { id:'dd10', tema:'Energia Mecânica', enunciado:'Numa rampa sem atrito, um carrinho de 2 kg parte do repouso a 8 m de altura (g = 10 m/s²). Sobre a energia cinética ao passar por um ponto a 3 m de altura, é correto afirmar que:', dica:'Ec ganha = Ep perdida: m·g·(8 − 3).', svg:'<svg class="quiz-figure" viewBox="0 0 300 110" xmlns="http://www.w3.org/2000/svg"><rect x="0" y="86" width="300" height="6" fill="#bbb"/><path d="M 30 24 Q 100 24 150 86 L 30 86 Z" fill="#b0bec5"/><circle cx="42" cy="34" r="7" fill="#FF9800"/><line x1="24" y1="24" x2="24" y2="86" stroke="#4CAF50" stroke-width="2" stroke-dasharray="3 3"/><text x="2" y="56" font-size="11" fill="#2e7d32" text-anchor="start">8 m</text><line x1="150" y1="52" x2="290" y2="52" stroke="#ff9800" stroke-width="1.5" stroke-dasharray="4 3"/><text x="200" y="48" font-size="11" fill="#e65100" text-anchor="start">ponto a 3 m</text></svg>', opcoes:[ {t:'vale 100 J, igual à energia potencial perdida ao descer de 8 m para 3 m', c:true}, {t:'vale 160 J, toda a energia potencial do topo', c:false}, {t:'vale 60 J, a energia potencial no ponto de 3 m', c:false}, {t:'é nula, pois ainda não chegou embaixo', c:false}, {t:'vale 200 J', c:false} ] }
+            ]
+        };
+
+        function embaralhar(arr) {
+            const a = arr.slice();
+            for (let i = a.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [a[i], a[j]] = [a[j], a[i]];
+            }
+            return a;
+        }
+
+        function renderDesafios(nivel) {
+            const banco = bancoDesafios[nivel];
+            const holder = document.getElementById('quiz-holder-' + nivel);
+            if (!banco || !holder) return;
+            const cor = { facil: '#4CAF50', medio: '#FF9800', dificil: '#f44336' }[nivel];
+            const pts = { facil: 10, medio: 20, dificil: 30 }[nivel];
+            const letras = ['a', 'b', 'c', 'd', 'e'];
+            const sorteadas = embaralhar(banco).slice(0, 5);
+            holder.innerHTML = sorteadas.map((q, idx) => {
+                const opcoes = embaralhar(q.opcoes);
+                const opts = opcoes.map((o, i) =>
+                    `<div class="quiz-option" onclick="checkAnswer(this, ${o.c}, '${q.id}')">${letras[i]}) ${o.t}</div>`
+                ).join('');
+                const dica = q.dica ? `<p style="margin-top:10px; font-size:0.9em; color:#666;">💡 Dica: ${q.dica}</p>` : '';
+                return `
+                    <div class="quiz-card">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; gap:10px;">
+                            <h3>Questão ${idx + 1} — ${q.tema}</h3>
+                            <span class="points-badge" style="background:${cor};">${pts} pontos</span>
+                        </div>
+                        ${q.svg || ''}
+                        <p>${q.enunciado}</p>
+                        ${opts}
+                        ${dica}
+                    </div>`;
+            }).join('');
+        }
+
+        // ============ DESAFIOS SEMANAIS PROGRAMADOS ============
+        // 4 desafios que se alternam automaticamente conforme a semana do calendário.
+        // Para alinhar a "Semana 1" a uma data específica, ajuste a data de referência
+        // abaixo (deve ser uma segunda-feira). O ciclo reinicia a cada 4 semanas.
+        const DESAFIO_SEMANAL_INICIO = new Date(2026, 0, 5); // 05/01/2026 (segunda-feira)
+
+        const desafiosSemanais = [
+            {
+                titulo: 'Semana 1 — O Mistério da Velocidade',
+                svg: '<svg class=\"card-figure\" viewBox=\"0 0 300 96\" xmlns=\"http://www.w3.org/2000/svg\"><rect x=\"0\" y=\"74\" width=\"300\" height=\"6\" fill=\"#8BC34A\"/><line x1=\"10\" y1=\"77\" x2=\"290\" y2=\"77\" stroke=\"#fff\" stroke-width=\"2\" stroke-dasharray=\"12 10\"/><rect x=\"50\" y=\"48\" width=\"50\" height=\"24\" rx=\"6\" fill=\"#fff\"/><circle cx=\"64\" cy=\"74\" r=\"6\" fill=\"#333\"/><circle cx=\"90\" cy=\"74\" r=\"6\" fill=\"#333\"/><g stroke=\"#ffeb3b\" stroke-width=\"3\"><line x1=\"108\" y1=\"58\" x2=\"130\" y2=\"58\"/><line x1=\"140\" y1=\"58\" x2=\"170\" y2=\"58\"/><line x1=\"180\" y1=\"58\" x2=\"220\" y2=\"58\"/></g><polygon points=\"220,53 232,58 220,63\" fill=\"#ffeb3b\"/><text x=\"170\" y=\"44\" font-size=\"11\" fill=\"#fff\" text-anchor=\"middle\">0 → 72 km/h</text></svg>',
+                contexto: 'Um carro parte do repouso e atinge 72 km/h em 10 segundos, com aceleração constante.',
+                itens: ['a) A aceleração, em m/s²', 'b) A distância percorrida nesse intervalo'],
+                dicas: ['Converta 72 km/h para m/s (÷ 3,6)', 'Use a = Δv / Δt', 'Use S = v₀·t + a·t²/2'],
+                resolucao: '72 km/h = 20 m/s.<br>a) a = Δv/Δt = 20 / 10 = <strong>2 m/s²</strong><br>b) S = 0 + ½·2·10² = <strong>100 m</strong>',
+                id: 'sem1',
+                opcoes: [ {t:'a) 2 m/s²  e  b) 100 m', c:true}, {t:'a) 2 m/s²  e  b) 200 m', c:false}, {t:'a) 7,2 m/s²  e  b) 100 m', c:false}, {t:'a) 20 m/s²  e  b) 200 m', c:false}, {t:'a) 0,5 m/s²  e  b) 50 m', c:false} ]
+            },
+            {
+                titulo: 'Semana 2 — A Balança no Elevador',
+                svg: '<svg class=\"card-figure\" viewBox=\"0 0 300 96\" xmlns=\"http://www.w3.org/2000/svg\"><rect x=\"110\" y=\"16\" width=\"70\" height=\"74\" fill=\"#fff\" opacity=\"0.85\"/><circle cx=\"145\" cy=\"40\" r=\"8\" fill=\"#ffcc80\"/><line x1=\"145\" y1=\"48\" x2=\"145\" y2=\"66\" stroke=\"#333\" stroke-width=\"4\"/><line x1=\"220\" y1=\"70\" x2=\"220\" y2=\"28\" stroke=\"#ffeb3b\" stroke-width=\"4\"/><polygon points=\"214,30 226,30 220,18\" fill=\"#ffeb3b\"/><text x=\"228\" y=\"52\" font-size=\"11\" fill=\"#fff\">a = 2 m/s²</text></svg>',
+                contexto: 'Uma pessoa de 60 kg está sobre uma balança dentro de um elevador que sobe acelerando a 2 m/s² (g = 10 m/s²).',
+                itens: ['a) O peso real da pessoa, em N', 'b) A força que a balança marca (força normal), em N'],
+                dicas: ['Peso: P = m·g', 'Subindo e acelerando: N − P = m·a', 'Logo N = m·(g + a)'],
+                resolucao: 'a) P = m·g = 60·10 = <strong>600 N</strong><br>b) N − P = m·a → N = m·(g+a) = 60·(10+2) = <strong>720 N</strong><br>A balança marca mais que o peso porque o elevador acelera para cima.',
+                id: 'sem2',
+                opcoes: [ {t:'a) 600 N  e  b) 720 N', c:true}, {t:'a) 600 N  e  b) 600 N', c:false}, {t:'a) 600 N  e  b) 480 N', c:false}, {t:'a) 720 N  e  b) 600 N', c:false}, {t:'a) 120 N  e  b) 720 N', c:false} ]
+            },
+            {
+                titulo: 'Semana 3 — A Descida do Skate',
+                svg: '<svg class=\"card-figure\" viewBox=\"0 0 300 96\" xmlns=\"http://www.w3.org/2000/svg\"><rect x=\"0\" y=\"84\" width=\"300\" height=\"6\" fill=\"#8BC34A\"/><path d=\"M50 28 Q60 84 210 84\" stroke=\"#fff\" stroke-width=\"6\" fill=\"none\"/><circle cx=\"54\" cy=\"28\" r=\"7\" fill=\"#FFC107\"/><line x1=\"38\" y1=\"28\" x2=\"38\" y2=\"84\" stroke=\"#ffeb3b\" stroke-width=\"2\" stroke-dasharray=\"3 3\"/><text x=\"14\" y=\"58\" font-size=\"11\" fill=\"#fff\">4 m</text><line x1=\"212\" y1=\"78\" x2=\"252\" y2=\"78\" stroke=\"#ffeb3b\" stroke-width=\"4\"/><polygon points=\"252,73 264,78 252,83\" fill=\"#ffeb3b\"/><text x=\"236\" y=\"70\" font-size=\"10\" fill=\"#fff\">v = ?</text></svg>',
+                contexto: 'Um skatista de 50 kg parte do repouso no topo de uma rampa de 4 m de altura, sem atrito (g = 10 m/s²).',
+                itens: ['a) A energia potencial no topo, em J', 'b) A velocidade ao chegar embaixo, em m/s'],
+                dicas: ['Ep = m·g·h', 'Sem atrito, toda a Ep vira Ec', '½·m·v² = Ep → v = √(2·g·h)'],
+                resolucao: 'a) Ep = m·g·h = 50·10·4 = <strong>2000 J</strong><br>b) ½·m·v² = 2000 → v² = 80 → v = √80 ≈ <strong>8,9 m/s</strong>',
+                id: 'sem3',
+                opcoes: [ {t:'a) 2000 J  e  b) ≈ 8,9 m/s', c:true}, {t:'a) 2000 J  e  b) 40 m/s', c:false}, {t:'a) 200 J  e  b) 8,9 m/s', c:false}, {t:'a) 2000 J  e  b) ≈ 4,0 m/s', c:false}, {t:'a) 500 J  e  b) 10 m/s', c:false} ]
+            },
+            {
+                titulo: 'Semana 4 — O Chute a Gol',
+                svg: '<svg class=\"card-figure\" viewBox=\"0 0 300 96\" xmlns=\"http://www.w3.org/2000/svg\"><rect x=\"0\" y=\"84\" width=\"300\" height=\"6\" fill=\"#8BC34A\"/><path d=\"M40 84 Q150 6 260 84\" stroke=\"#ffeb3b\" stroke-width=\"2\" fill=\"none\" stroke-dasharray=\"5 3\"/><line x1=\"40\" y1=\"84\" x2=\"92\" y2=\"54\" stroke=\"#fff\" stroke-width=\"4\"/><polygon points=\"92,54 82,55 87,64\" fill=\"#fff\"/><text x=\"98\" y=\"50\" font-size=\"10\" fill=\"#fff\">25 m/s</text><path d=\"M62 84 A22 22 0 0 0 56 70\" stroke=\"#fff\" fill=\"none\"/><text x=\"66\" y=\"78\" font-size=\"10\" fill=\"#fff\">37°</text><circle cx=\"150\" cy=\"16\" r=\"6\" fill=\"#fff\"/></svg>',
+                contexto: 'Uma bola é chutada a 25 m/s formando 37° com o solo (sen 37° = 0,6; cos 37° = 0,8; g = 10 m/s²).',
+                itens: ['a) As componentes horizontal (vx) e vertical (vy) da velocidade', 'b) A altura máxima atingida, em m'],
+                dicas: ['vx = v·cos(θ) e vy = v·sen(θ)', 'Na altura máxima a velocidade vertical é zero', 'Hmáx = vy² / (2·g)'],
+                resolucao: 'a) vx = 25·0,8 = <strong>20 m/s</strong>; vy = 25·0,6 = <strong>15 m/s</strong><br>b) Hmáx = vy²/(2g) = 15²/(2·10) = 225/20 = <strong>11,25 m</strong>',
+                id: 'sem4',
+                opcoes: [ {t:'a) vx=20 e vy=15 m/s  e  b) 11,25 m', c:true}, {t:'a) vx=15 e vy=20 m/s  e  b) 11,25 m', c:false}, {t:'a) vx=20 e vy=15 m/s  e  b) 22,5 m', c:false}, {t:'a) vx=20 e vy=15 m/s  e  b) 20 m', c:false}, {t:'a) vx=25 e vy=25 m/s  e  b) 31,25 m', c:false} ]
+            }
+        ];
+
+        // ===================== PAINEL DO PROFESSOR (ADMIN) =====================
+        const ADMIN_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxE8gSrOGD4hUzUxu5vvNKiVdPyJPrMBe7T9vWaZefc-Mq8WFj0SFBC0bN7Ru8juMTr/exec';
+        let SEMANA_OVERRIDE = 0;   // 0 = automático por data; 1..4 = fixada pelo professor
+        let ADMIN_SENHA = '';      // guardada só em memória, nunca no código público
+
+        function jsonp(url, cb) {
+            const fn = 'jsonpcb_' + Math.random().toString(36).slice(2);
+            const s = document.createElement('script');
+            let done = false;
+            window[fn] = function (data) { done = true; delete window[fn]; s.remove(); cb(data); };
+            s.onerror = function () { if (!done) { delete window[fn]; s.remove(); cb(null); } };
+            s.src = url + (url.indexOf('?') >= 0 ? '&' : '?') + 'callback=' + fn;
+            document.body.appendChild(s);
+        }
+
+        function carregarSemanaAtiva() {
+            jsonp(ADMIN_SCRIPT_URL + '?action=getSemana', function (d) {
+                if (d && typeof d.semana === 'number') {
+                    SEMANA_OVERRIDE = d.semana;
+                    if (document.getElementById('semanal-holder')) renderDesafioSemanal();
+                    const el = document.getElementById('admin-semana-atual');
+                    if (el) el.textContent = (SEMANA_OVERRIDE >= 1 && SEMANA_OVERRIDE <= 4)
+                        ? ('Semana ' + SEMANA_OVERRIDE + ' (fixada por você)') : 'Automático (segue o calendário)';
+                }
+            });
+        }
+
+        function abrirAdmin() { document.getElementById('admin-panel').style.display = 'block'; }
+        function fecharAdmin() { document.getElementById('admin-panel').style.display = 'none'; }
+
+        function adminEntrar() {
+            const senha = document.getElementById('admin-senha').value;
+            document.getElementById('admin-erro').style.display = 'none';
+            jsonp(ADMIN_SCRIPT_URL + '?action=getDados&senha=' + encodeURIComponent(senha), function (d) {
+                if (!d || d.erro) { document.getElementById('admin-erro').style.display = 'block'; return; }
+                ADMIN_SENHA = senha;
+                document.getElementById('admin-login').style.display = 'none';
+                document.getElementById('admin-conteudo').style.display = 'block';
+                carregarSemanaAtiva();
+                mostrarDados(d.alunos || []);
+            });
+        }
+
+        function adminSetSemana(n) {
+            if (!ADMIN_SENHA) return;
+            const status = document.getElementById('admin-status');
+            status.textContent = 'Enviando...';
+            fetch(ADMIN_SCRIPT_URL, {
+                method: 'POST', mode: 'no-cors',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ action: 'setSemana', semana: n, senha: ADMIN_SENHA })
+            }).then(function () {
+                setTimeout(function () {
+                    carregarSemanaAtiva();
+                    status.textContent = (n === 0) ? 'Voltou para automático (por data).' : ('Desafio da Semana ' + n + ' lançado para todos.');
+                }, 900);
+            }).catch(function () { status.textContent = 'Falha ao enviar. Tente de novo.'; });
+        }
+
+        function adminCarregarDados() {
+            jsonp(ADMIN_SCRIPT_URL + '?action=getDados&senha=' + encodeURIComponent(ADMIN_SENHA), function (d) {
+                if (d && d.alunos) mostrarDados(d.alunos);
+            });
+        }
+
+        function mostrarDados(alunos) {
+            const alvo = document.getElementById('admin-dados');
+            if (!alunos || !alunos.length) { alvo.innerHTML = '<p>Nenhum dado ainda.</p>'; return; }
+            const cols = ['Nome', 'Turma', 'Pontos', 'Cards', 'Simul.', 'Quizzes', 'Badges', 'Último acesso'];
+            let h = '<table style="width:100%; border-collapse:collapse; font-size:0.9em;"><thead><tr>' +
+                cols.map(function (c) { return '<th style="text-align:left; border-bottom:2px solid #ddd; padding:6px;">' + c + '</th>'; }).join('') +
+                '</tr></thead><tbody>';
+            alunos.sort(function (a, b) { return (b.pontos || 0) - (a.pontos || 0); });
+            alunos.forEach(function (a) {
+                const linha = [a.nome, a.turma, a.pontos, a.cards, a.simulacoes, a.quizzes, a.badges, a.ultimoAcesso];
+                h += '<tr>' + linha.map(function (v) { return '<td style="border-bottom:1px solid #eee; padding:6px;">' + (v == null ? '' : v) + '</td>'; }).join('') + '</tr>';
+            });
+            h += '</tbody></table><p style="font-size:0.8em; color:#888; margin-top:8px;">' + alunos.length + ' aluno(s). Ordenado por pontos.</p>';
+            alvo.innerHTML = h;
+        }
+
+        function semanaSemanalIndex() {
+            if (SEMANA_OVERRIDE >= 1 && SEMANA_OVERRIDE <= 4) return SEMANA_OVERRIDE - 1; // fixada pelo professor
+            const hoje = new Date();
+            const semanas = Math.floor((hoje - DESAFIO_SEMANAL_INICIO) / (7 * 24 * 3600 * 1000));
+            return ((semanas % 4) + 4) % 4; // 0..3, automático por data
+        }
+
+        function revelarSolucaoSemanal() {
+            const el = document.getElementById('resolucao-semanal');
+            if (el) el.style.display = 'block';
+        }
+
+        function renderDesafioSemanal() {
+            const holder = document.getElementById('semanal-holder');
+            if (!holder) return;
+            const i = semanaSemanalIndex();
+            const d = desafiosSemanais[i];
+            const dicas = d.dicas.map(x => `<p style="font-size:0.9em; margin:5px 0;">• ${x}</p>`).join('');
+            const itens = d.itens.map(x => `<p style="margin-left:20px; margin-bottom:6px;">${x}</p>`).join('');
+            const letras = ['a','b','c','d','e'];
+            const opcoes = embaralhar(d.opcoes).map((o,j) => `<div class="quiz-option" style="color:#333;" onclick="checkAnswer(this, ${o.c}, '${d.id}'); revelarSolucaoSemanal()">${letras[j]}) ${o.t}</div>`).join('');
+            holder.innerHTML = `
+                <div class="card" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap;">
+                        <h2 style="color: white; margin:0;">💎 Desafio Semanal</h2>
+                        <span class="points-badge" style="background: rgba(255,255,255,0.9); color:#5a3fc0;">Semana ${i + 1} de 4</span>
+                    </div>
+                    <h3 style="margin:12px 0; color:#fff;">${d.titulo}</h3>
+                    ${d.svg}
+                    <p style="margin-bottom:10px; font-size:1.1em;"><strong>Problema:</strong> ${d.contexto}</p>
+                    <p style="margin-bottom:8px; font-size:1.05em;">Resolva os dois itens:</p>
+                    ${itens}
+                    <div style="background: rgba(255,255,255,0.2); padding:15px; border-radius:10px; margin:18px 0;">
+                        <p style="font-size:0.95em; margin:5px 0;"><strong>💡 Dicas:</strong></p>
+                        ${dicas}
+                    </div>
+                    <p style="margin:6px 0 8px; font-size:1.05em;"><strong>Marque a alternativa correta (vale 100 pontos):</strong></p>
+                    <div style="background: rgba(255,255,255,0.96); border-radius:10px; padding:10px 10px 2px;">
+                        ${opcoes}
+                    </div>
+                    <div id="resolucao-semanal" style="display:none; background: rgba(255,255,255,0.92); padding:18px; border-radius:10px; color:#333; margin-top:15px;">
+                        <h4 style="color:#5a3fc0; margin-bottom:10px;">✅ Resolução</h4>
+                        <p style="line-height:1.7;">${d.resolucao}</p>
+                    </div>
+                    <p style="font-size:0.85em; margin-top:14px; opacity:0.9;">🔄 Os desafios semanais mudam sozinhos a cada semana, num ciclo de 4.</p>
+                </div>`;
+        }
+
+        // Desafios - Navegação por níveis
+        function showDesafioLevel(level) {
+            document.querySelectorAll('.desafio-level-content').forEach(content => {
+                content.style.display = 'none';
+            });
+            document.getElementById('desafio-' + level).style.display = 'block';
+            renderDesafios(level);
+            if (level === 'semanal') renderDesafioSemanal();
+            
+            document.querySelectorAll('.topic-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            event.target.classList.add('active');
+        }
+        
+        // Virar flash card (ATUALIZADO - envia ao virar)
+        function flipCard(card) {
+            if (!card.classList.contains('flipped')) {
+                card.classList.add('flipped');
+                
+                const cardText = card.querySelector('h3').textContent;
+                if (!userData.cardsFlipped.includes(cardText)) {
+                    userData.cardsFlipped.push(cardText);
+                    const pointValue = card.textContent.includes('15 pontos') ? 15 : 10;
+                    addPoints(pointValue); // Já salva e envia automaticamente
+                    sounds.points();
+                }
+            } else {
+                card.classList.remove('flipped');
+            }
+        }
+        
+        // Adicionar pontos (ATUALIZADO - dispara envio automático)
+        function addPoints(value) {
+            userData.points += value;
+            updateDisplay();
+            
+            // 🚀 Salva E envia automaticamente
+            saveUserData();
+            
+            checkBadges();
+        }
+        
+        // Verificar badges (CORRIGIDO - verifica todas as condições)
+        function checkBadges() {
+            let newBadges = [];
+            
+            // Estudante Dedicado - 10 cards
+            if (userData.cardsFlipped.length >= 5 && !userData.badges.includes('estudante_dedicado')) {
+                userData.badges.push('estudante_dedicado');
+                newBadges.push({icon: '📚', title: 'Estudante Dedicado', desc: 'Completou 10 flash cards!'});
+            }
+            
+            // Mestre dos Cards - 15 cards
+            if (userData.cardsFlipped.length >= 10 && !userData.badges.includes('mestre_cards')) {
+                userData.badges.push('mestre_cards');
+                newBadges.push({icon: '🎓', title: 'Mestre dos Cards', desc: 'Completou todos os flash cards!'});
+            }
+            
+            // Explorador Virtual - 1 simulação
+            if (userData.simsExplored.length >= 1 && !userData.badges.includes('explorador_virtual')) {
+                userData.badges.push('explorador_virtual');
+                newBadges.push({icon: '🔬', title: 'Explorador Virtual', desc: 'Usou sua primeira simulação!'});
+            }
+            
+            // Cientista Experimental - 5 simulações
+            if (userData.simsExplored.length >= 5 && !userData.badges.includes('cientista_experimental')) {
+                userData.badges.push('cientista_experimental');
+                newBadges.push({icon: '🧪', title: 'Cientista Experimental', desc: 'Explorou todas as 5 simulações!'});
+            }
+            
+            // Quiz Master - 10 quizzes corretos
+            if (userData.quizzesAnswered.length >= 10 && !userData.badges.includes('quiz_master')) {
+                userData.badges.push('quiz_master');
+                newBadges.push({icon: '🎯', title: 'Quiz Master', desc: 'Acertou 10 questões!'});
+            }
+            
+            // Einstein Junior - 500 pontos
+            if (userData.points >= 500 && !userData.badges.includes('einstein_junior')) {
+                userData.badges.push('einstein_junior');
+                newBadges.push({icon: '⚡', title: 'Einstein Junior', desc: 'Atingiu 500 pontos!'});
+            }
+            
+            // Mestre da Física - 600 pontos
+            if (userData.points >= 600 && !userData.badges.includes('mestre_fisica')) {
+                userData.badges.push('mestre_fisica');
+                newBadges.push({icon: '💎', title: 'Mestre da Física', desc: 'Atingiu 600 pontos!'});
+            }
+            
+            // Mostra notificação para cada badge nova
+            newBadges.forEach((badge, index) => {
+                setTimeout(() => {
+                    showBadgeUnlock(badge.icon, badge.title, badge.desc);
+                }, index * 1000); // 1 segundo entre cada notificação
+            });
+            
+            // Atualiza página de conquistas
+            updateBadgesDisplay();
+            
+            // Salva se desbloqueou alguma
+            if (newBadges.length > 0) {
+                saveUserData();
+            }
+        }
+        
+        // Atualizar display das badges (NOVA FUNÇÃO)
+        function updateBadgesDisplay() {
+            // Atualiza visualmente a página de conquistas
+            const badgeItems = document.querySelectorAll('.badge-item');
+            const badgeMap = {
+                0: 'primeiro_passo',
+                1: 'estudante_dedicado',
+                2: 'mestre_cards',
+                3: 'explorador_virtual',
+                4: 'cientista_experimental',
+                5: 'quiz_master',
+                6: 'einstein_junior',
+                7: 'mestre_fisica'
+            };
+            
+            badgeItems.forEach((item, index) => {
+                const badgeId = badgeMap[index];
+                if (userData.badges.includes(badgeId)) {
+                    item.classList.remove('locked');
+                    item.classList.add('unlocked');
+                } else {
+                    item.classList.remove('unlocked');
+                    item.classList.add('locked');
+                }
+            });
+        }
+        
+        // Mostrar badge desbloqueado
+        function showBadgeUnlock(icon, title, description) {
+            sounds.badge();
+            createConfetti();
+            
+            const notification = document.createElement('div');
+            notification.style.cssText = 'position: fixed; top: 100px; right: 20px; background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; padding: 25px 35px; border-radius: 20px; box-shadow: 0 15px 40px rgba(0,0,0,0.4); z-index: 1500; animation: slideIn 0.5s; border: 3px solid white;';
+            notification.innerHTML = `
+                <div style="font-size: 4em; text-align: center; margin-bottom: 15px; animation: badgePulse 1s infinite;">${icon}</div>
+                <h3 style="margin: 0 0 8px 0; font-size: 1.5em; text-align: center;">🎉 Badge Desbloqueado!</h3>
+                <p style="margin: 0; font-size: 1.2em; text-align: center;"><strong>${title}</strong></p>
+                <p style="margin: 8px 0 0 0; font-size: 1em; opacity: 0.95; text-align: center;">${description}</p>
+            `;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.5s';
+                setTimeout(() => notification.remove(), 500);
+            }, 4000);
+        }
+        
+        // Atualizar estatísticas (atualizado)
+        function updateStats() {
+            updateDisplay();
+        }
+        
+        // Abrir simulação local (ATUALIZADO - envia ao usar)
+        function openSimulationLocal(simType, simId) {
+            document.querySelectorAll('.sim-container').forEach(sim => {
+                sim.style.display = 'none';
+            });
+            
+            document.getElementById('sim-' + simType).style.display = 'block';
+            document.getElementById('simModal').classList.add('active');
+            
+            if (!userData.simsExplored.includes(simId)) {
+                userData.simsExplored.push(simId);
+                addPoints(15); // Já salva e envia automaticamente
+                sounds.points();
+            }
+            
+            setTimeout(() => {
+                if (simType === 'projectile') initProjectile();
+                if (simType === 'forces') initForces();
+                if (simType === 'energy') initEnergy();
+                if (simType === 'mruv') initMRUV();
+                if (simType === 'collision') initCollision();
+            }, 100);
+        }
+        
+        // Fechar simulação
+        function closeSimulation() {
+            document.getElementById('simModal').classList.remove('active');
+        }
+        
+        // SIMULAÇÃO 1: LANÇAMENTO DE PROJÉTIL
+        let projectileAnim = null;
+
+        // Passo "bonito" (1, 2, 5 x 10^n) para as marcações do eixo
+        function niceStep(raw) {
+            const pow = Math.pow(10, Math.floor(Math.log10(raw)));
+            const n = raw / pow;
+            let step;
+            if (n < 1.5) step = 1;
+            else if (n < 3) step = 2;
+            else if (n < 7) step = 5;
+            else step = 10;
+            return step * pow;
+        }
+
+        // Desenha chão e réguas em METROS de acordo com a escala atual (ppm = px por metro)
+        const PROJ_ORIGIN_X = 16;   // margem à esquerda para o ponto de partida (px)
+
+        function drawProjectileScene(ctx, canvas, ppm, groundY, originX) {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            // céu: fundo branco em toda a largura do canvas (a bolinha sempre voa sobre branco)
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(0, 0, canvas.width, groundY);
+            // chão
+            ctx.fillStyle = '#8BC34A';
+            ctx.fillRect(0, groundY, canvas.width, canvas.height - groundY);
+
+            ctx.font = '12px Arial';
+            ctx.textAlign = 'center';
+            const stepM = niceStep((canvas.width / ppm) / 8); // ~8 marcações no eixo x
+            const dec = stepM < 1 ? 1 : 0;
+            for (let m = 0; originX + m * ppm <= canvas.width; m += stepM) {
+                const px = originX + m * ppm;
+                ctx.strokeStyle = 'rgba(0,0,0,0.12)';
+                ctx.lineWidth = 1;
+                ctx.beginPath();
+                ctx.moveTo(px, 0);
+                ctx.lineTo(px, groundY);
+                ctx.stroke();
+                ctx.fillStyle = '#333';
+                ctx.fillText(m.toFixed(dec) + ' m', px, groundY + 18);
+            }
+            ctx.textAlign = 'start';
+        }
+
+        // Escala FIXA (a mesma para todos os lançamentos), dimensionada para o lançamento
+        // máximo caber na tela. Assim as distâncias ficam comparáveis: mais velocidade =
+        // alcance visivelmente maior, sem nunca sair do campo de visão.
+        function escalaProjetil(canvas, groundY) {
+            const g = 9.8;
+            const usableW = canvas.width - PROJ_ORIGIN_X - 10;
+            const usableH = groundY - 10;
+            const vMax = parseFloat(document.getElementById('velocitySlider').max) || 50;
+            const alcanceMax = (vMax * vMax) / g;         // alcance máximo (a 45°)
+            const alturaMax = (vMax * vMax) / (2 * g);    // altura máxima (a 90°)
+            return Math.min(usableW / (alcanceMax * 1.05), usableH / (alturaMax * 1.10));
+        }
+
+        function initProjectile() {
+            const canvas = document.getElementById('projectileCanvas');
+            const ctx = canvas.getContext('2d');
+            const groundY = canvas.height - 30;
+            drawProjectileScene(ctx, canvas, escalaProjetil(canvas, groundY), groundY, PROJ_ORIGIN_X);
+
+            document.getElementById('angleSlider').oninput = function() {
+                document.getElementById('angleValue').textContent = this.value;
+            };
+            document.getElementById('velocitySlider').oninput = function() {
+                document.getElementById('velocityValue').textContent = this.value;
+            };
+        }
+
+        function launchProjectile() {
+            const canvas = document.getElementById('projectileCanvas');
+            const ctx = canvas.getContext('2d');
+            const groundY = canvas.height - 30;
+            const usableW = canvas.width - PROJ_ORIGIN_X - 10;
+            const usableH = groundY - 10;
+
+            const angle = parseFloat(document.getElementById('angleSlider').value) * Math.PI / 180;
+            const v0 = parseFloat(document.getElementById('velocitySlider').value);
+            const g = 9.8;
+
+            const vx = v0 * Math.cos(angle);
+            const vy = v0 * Math.sin(angle);
+
+            // Grandezas físicas (SI)
+            const flightTime = (2 * vy) / g || 0.001;              // s
+            const range = (v0 * v0 * Math.sin(2 * angle)) / g;     // m
+            const maxHeight = (vy * vy) / (2 * g);                 // m
+
+            // Escala fixa: a distância na tela representa a distância real; velocidades
+            // maiores caem mais longe (o alcance cresce com v²).
+            const ppm = escalaProjetil(canvas, groundY);
+
+            if (projectileAnim) clearInterval(projectileAnim);
+            drawProjectileScene(ctx, canvas, ppm, groundY, PROJ_ORIGIN_X);
+
+            const trail = [];
+            let t = 0;
+            const dt = flightTime / 120; // duração de animação constante (~2 s)
+
+            projectileAnim = setInterval(() => {
+                const x = vx * t;                      // metros
+                const y = vy * t - 0.5 * g * t * t;    // metros
+
+                if (y < 0 || t > flightTime) {
+                    clearInterval(projectileAnim);
+                    document.getElementById('projectileStats').innerHTML = `
+                        <strong>📊 Resultado:</strong><br>
+                        Alcance: ${range.toFixed(2)} m<br>
+                        Altura Máxima: ${maxHeight.toFixed(2)} m<br>
+                        Tempo de Voo: ${flightTime.toFixed(2)} s
+                    `;
+                    return;
+                }
+
+                const px = PROJ_ORIGIN_X + x * ppm;
+                const py = groundY - y * ppm;
+                trail.push([px, py]);
+
+                drawProjectileScene(ctx, canvas, ppm, groundY, PROJ_ORIGIN_X);
+                ctx.strokeStyle = 'rgba(255,87,34,0.45)';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                trail.forEach((p, i) => i ? ctx.lineTo(p[0], p[1]) : ctx.moveTo(p[0], p[1]));
+                ctx.stroke();
+
+                ctx.fillStyle = '#FF5722';
+                ctx.beginPath();
+                ctx.arc(px, py, 8, 0, Math.PI * 2);
+                ctx.fill();
+
+                t += dt;
+            }, 1000 / 60);
+        }
+
+        function resetProjectile() {
+            if(projectileAnim) clearInterval(projectileAnim);
+            initProjectile();
+            document.getElementById('projectileStats').innerHTML = '';
+        }
+        
+        // SIMULAÇÃO 2: FORÇAS
+        let forcesAnim = null;
+        const FORCES_PPM = 8;     // 8 px por metro (canvas 800px = 100 m)
+        const FORCES_X0 = 50;     // posição de partida do bloco (px)
+
+        function drawForcesScene(ctx, canvas) {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = '#8BC34A';
+            ctx.fillRect(0, canvas.height - 30, canvas.width, 30);
+        }
+
+        function initForces() {
+            const canvas = document.getElementById('forcesCanvas');
+            const ctx = canvas.getContext('2d');
+            drawForcesScene(ctx, canvas);
+
+            ctx.fillStyle = '#2196F3';
+            ctx.fillRect(FORCES_X0, canvas.height - 80, 50, 50);
+
+            document.getElementById('forceSlider').oninput = function() {
+                document.getElementById('forceValue').textContent = this.value;
+            };
+            document.getElementById('massSlider').oninput = function() {
+                document.getElementById('massValue').textContent = this.value;
+            };
+        }
+
+        function applyForce() {
+            const canvas = document.getElementById('forcesCanvas');
+            const ctx = canvas.getContext('2d');
+            const force = parseFloat(document.getElementById('forceSlider').value);
+            const mass = parseFloat(document.getElementById('massSlider').value);
+            const acceleration = force / mass;
+
+            let s = 0;    // deslocamento (m)
+            let v = 0;    // velocidade (m/s)
+            let t = 0;    // tempo (s)
+            const dt = 0.05;
+
+            if(forcesAnim) clearInterval(forcesAnim);
+
+            forcesAnim = setInterval(() => {
+                v += acceleration * dt;
+                s += v * dt;
+                t += dt;
+
+                const xpx = FORCES_X0 + s * FORCES_PPM;
+                if(xpx > canvas.width - 50) {
+                    clearInterval(forcesAnim);
+                    return;
+                }
+
+                drawForcesScene(ctx, canvas);
+                ctx.fillStyle = '#2196F3';
+                ctx.fillRect(xpx, canvas.height - 80, 50, 50);
+
+                // Vetor de força (comprimento apenas ilustrativo)
+                const cx = xpx + 25;
+                const arrow = force * 0.4;
+                ctx.strokeStyle = '#f44336';
+                ctx.lineWidth = 3;
+                ctx.beginPath();
+                ctx.moveTo(cx, canvas.height - 55);
+                ctx.lineTo(cx + arrow, canvas.height - 55);
+                ctx.stroke();
+                ctx.fillStyle = '#f44336';
+                ctx.beginPath();
+                ctx.moveTo(cx + arrow, canvas.height - 55);
+                ctx.lineTo(cx + arrow - 10, canvas.height - 60);
+                ctx.lineTo(cx + arrow - 10, canvas.height - 50);
+                ctx.fill();
+
+                document.getElementById('forcesStats').innerHTML = `
+                    <strong>📊 F = m·a</strong><br>
+                    Aceleração: ${acceleration.toFixed(2)} m/s²<br>
+                    Velocidade: ${v.toFixed(2)} m/s<br>
+                    Posição: ${s.toFixed(2)} m<br>
+                    Tempo: ${t.toFixed(2)} s
+                `;
+            }, 50);
+        }
+        
+        function resetForces() {
+            if(forcesAnim) clearInterval(forcesAnim);
+            initForces();
+            document.getElementById('forcesStats').innerHTML = '';
+        }
+        
+        // SIMULAÇÃO 3: ENERGIA (conservação — tudo em SI)
+        let energyAnim = null;
+        const ENERGY_PPM = 10;   // 10 px por metro (altura desenhada = h * 10)
+
+        // Desenha uma esfera com sombreamento (gradiente radial) para dar volume 3D
+        function drawSphere(ctx, cx, cy, r, corBase, corSombra) {
+            const grad = ctx.createRadialGradient(
+                cx - r * 0.35, cy - r * 0.35, r * 0.1,  // foco do brilho (canto superior esquerdo)
+                cx, cy, r                                // extremidade da esfera
+            );
+            grad.addColorStop(0, '#ffffff');            // reflexo
+            grad.addColorStop(0.25, corBase);           // cor principal
+            grad.addColorStop(1, corSombra);            // sombra na borda
+            ctx.fillStyle = grad;
+            ctx.beginPath();
+            ctx.arc(cx, cy, r, 0, Math.PI * 2);
+            ctx.fill();
+            // sombra de contato no chão (opcional, some quando a esfera está no ar)
+        }
+
+        function drawEnergyScene(ctx, canvas) {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = '#8BC34A';
+            ctx.fillRect(0, canvas.height - 30, canvas.width, 30);
+        }
+
+        function initEnergy() {
+            const canvas = document.getElementById('energyCanvas');
+            const ctx = canvas.getContext('2d');
+            drawEnergyScene(ctx, canvas);
+
+            const h = parseFloat(document.getElementById('heightSlider').value); // metros
+            drawSphere(ctx, 400, canvas.height - 30 - h * ENERGY_PPM, 20, '#FF9800', '#B25E00');
+
+            document.getElementById('heightSlider').oninput = function() {
+                document.getElementById('heightValue').textContent = this.value;
+                initEnergy();
+            };
+        }
+
+        function dropBall() {
+            const canvas = document.getElementById('energyCanvas');
+            const ctx = canvas.getContext('2d');
+            const h0 = parseFloat(document.getElementById('heightSlider').value); // metros
+            const g = 9.8;
+            const m = 5;        // kg
+            const dt = 0.02;    // s
+
+            let y = h0;   // altura (m)
+            let v = 0;    // velocidade de queda (m/s)
+
+            if(energyAnim) clearInterval(energyAnim);
+
+            energyAnim = setInterval(() => {
+                v += g * dt;
+                y -= v * dt;
+
+                if(y <= 0) {
+                    y = 0;
+                    v = Math.sqrt(2 * g * h0);   // valor físico exato ao tocar o solo
+                    clearInterval(energyAnim);
+                }
+
+                const Ep = m * g * y;            // J
+                const Ec = 0.5 * m * v * v;      // J
+                const Etotal = Ep + Ec;          // J
+
+                drawEnergyScene(ctx, canvas);
+                drawSphere(ctx, 400, canvas.height - 30 - y * ENERGY_PPM, 20, '#FF9800', '#B25E00');
+
+                document.getElementById('energyStats').innerHTML = `
+                    <strong>⚡ Energia (m = ${m} kg):</strong><br>
+                    Altura: ${y.toFixed(2)} m &nbsp;|&nbsp; Velocidade: ${v.toFixed(2)} m/s<br>
+                    Potencial (Ep): ${Ep.toFixed(1)} J<br>
+                    Cinética (Ec): ${Ec.toFixed(1)} J<br>
+                    <strong>Total: ${Etotal.toFixed(1)} J (constante!)</strong>
+                `;
+            }, 20);
+        }
+        
+        function resetEnergy() {
+            if(energyAnim) clearInterval(energyAnim);
+            initEnergy();
+            document.getElementById('energyStats').innerHTML = '';
+        }
+        
+        // SIMULAÇÃO 4: MRUV (SI)
+        let mruvAnim = null;
+        const MRUV_PPM = 5;    // 5 px por metro
+        const MRUV_X0 = 50;    // ponto de partida do bloco (px)
+
+        function drawMruvScene(ctx, canvas) {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = '#8BC34A';
+            ctx.fillRect(0, canvas.height - 30, canvas.width, 30);
+        }
+
+        function initMRUV() {
+            const canvas = document.getElementById('mruvCanvas');
+            const ctx = canvas.getContext('2d');
+            drawMruvScene(ctx, canvas);
+
+            ctx.fillStyle = '#9C27B0';
+            ctx.fillRect(MRUV_X0, canvas.height - 70, 40, 40);
+
+            document.getElementById('accelSlider').oninput = function() {
+                document.getElementById('accelValue').textContent = this.value;
+            };
+        }
+
+        function startMRUV() {
+            const canvas = document.getElementById('mruvCanvas');
+            const ctx = canvas.getContext('2d');
+            const a = parseFloat(document.getElementById('accelSlider').value);
+
+            let s = 0;    // deslocamento (m)
+            let v = 0;    // velocidade (m/s)
+            let t = 0;    // tempo (s)
+            const dt = 0.05;
+
+            if(mruvAnim) clearInterval(mruvAnim);
+
+            mruvAnim = setInterval(() => {
+                v += a * dt;
+                s += v * dt;
+                t += dt;
+
+                const xpx = MRUV_X0 + s * MRUV_PPM;
+                if(xpx > canvas.width - 40 || xpx < 0) {
+                    clearInterval(mruvAnim);
+                    return;
+                }
+
+                drawMruvScene(ctx, canvas);
+                ctx.fillStyle = '#9C27B0';
+                ctx.fillRect(xpx, canvas.height - 70, 40, 40);
+
+                document.getElementById('mruvStats').innerHTML = `
+                    <strong>📊 MRUV:</strong><br>
+                    Tempo: ${t.toFixed(2)} s<br>
+                    Velocidade: ${v.toFixed(2)} m/s<br>
+                    Posição: ${s.toFixed(2)} m<br>
+                    Aceleração: ${a.toFixed(2)} m/s²
+                `;
+            }, 50);
+        }
+        
+        function resetMRUV() {
+            if(mruvAnim) clearInterval(mruvAnim);
+            initMRUV();
+            document.getElementById('mruvStats').innerHTML = '';
+        }
+        
+        // SIMULAÇÃO 5: COLISÕES
+        let collisionAnim = null;
+        function initCollision() {
+            const canvas = document.getElementById('collisionCanvas');
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            ctx.fillStyle = '#8BC34A';
+            ctx.fillRect(0, canvas.height - 30, canvas.width, 30);
+            
+            ctx.fillStyle = '#E91E63';
+            ctx.beginPath();
+            ctx.arc(100, canvas.height - 60, 25, 0, Math.PI * 2);
+            ctx.fill();
+            
+            ctx.fillStyle = '#00BCD4';
+            ctx.beginPath();
+            ctx.arc(700, canvas.height - 60, 25, 0, Math.PI * 2);
+            ctx.fill();
+        }
+        
+        const COLL_PPM = 8;   // 8 px por metro
+
+        function startCollision() {
+            const canvas = document.getElementById('collisionCanvas');
+            const ctx = canvas.getContext('2d');
+            const type = document.querySelector('input[name="collisionType"]:checked').value;
+
+            const m1 = 5, m2 = 5;          // kg
+            let x1 = 12.5, x2 = 87.5;      // posições (m) -> 100px e 700px
+            let v1 = 6, v2 = -4;           // velocidades (m/s)
+            let collided = false;
+            const dt = 0.05;               // s
+            const rM = 25 / COLL_PPM;      // raio da esfera em metros
+
+            if(collisionAnim) clearInterval(collisionAnim);
+
+            collisionAnim = setInterval(() => {
+                x1 += v1 * dt;
+                x2 += v2 * dt;
+
+                if(!collided && Math.abs(x1 - x2) < 2 * rM) {
+                    collided = true;
+                    if(type === 'elastic') {
+                        const v1f = ((m1 - m2) * v1 + 2 * m2 * v2) / (m1 + m2);
+                        const v2f = ((m2 - m1) * v2 + 2 * m1 * v1) / (m1 + m2);
+                        v1 = v1f;
+                        v2 = v2f;
+                    } else {
+                        const vf = (m1 * v1 + m2 * v2) / (m1 + m2);
+                        v1 = v2 = vf;
+                    }
+                }
+
+                ctx.clearRect(0, 0, canvas.width, canvas.height - 30);
+
+                ctx.fillStyle = '#E91E63';
+                ctx.beginPath();
+                ctx.arc(x1 * COLL_PPM, canvas.height - 60, 25, 0, Math.PI * 2);
+                ctx.fill();
+
+                ctx.fillStyle = '#00BCD4';
+                ctx.beginPath();
+                ctx.arc(x2 * COLL_PPM, canvas.height - 60, 25, 0, Math.PI * 2);
+                ctx.fill();
+
+                const p = m1 * v1 + m2 * v2;
+                const E = 0.5 * m1 * v1 * v1 + 0.5 * m2 * v2 * v2;
+
+                document.getElementById('collisionStats').innerHTML = `
+                    <strong>💥 Colisão ${type === 'elastic' ? 'Elástica' : 'Inelástica'}:</strong><br>
+                    v₁ = ${v1.toFixed(2)} m/s &nbsp; v₂ = ${v2.toFixed(2)} m/s<br>
+                    Momento total: ${p.toFixed(2)} kg·m/s (conservado!)<br>
+                    Energia cinética: ${E.toFixed(2)} J ${type === 'elastic' ? '(conservada!)' : '(parcialmente perdida)'}
+                `;
+
+                if(x1 * COLL_PPM > canvas.width + 50 || x2 * COLL_PPM < -50) {
+                    clearInterval(collisionAnim);
+                }
+            }, 30);
+        }
+        
+        function resetCollision() {
+            if(collisionAnim) clearInterval(collisionAnim);
+            initCollision();
+            document.getElementById('collisionStats').innerHTML = '';
+        }
+        
+        // Verificar resposta do quiz (ATUALIZADO - envia ao acertar)
+        function checkAnswer(option, isCorrect, quizId) {
+            const allOptions = option.parentElement.querySelectorAll('.quiz-option');
+            
+            // Desabilita todas as opções
+            allOptions.forEach(opt => {
+                opt.style.pointerEvents = 'none';
+            });
+            
+            if (isCorrect) {
+                sounds.correct();
+                option.classList.add('correct');
+                
+                // Pontuação por nível: fácil (df)=10, médio (dm)=20, difícil (dd)=30
+                let points = 10;
+                if (quizId.startsWith('sem')) points = 100;
+                else if (quizId.startsWith('dd')) points = 30;
+                else if (quizId.startsWith('dm')) points = 20;
+                else if (quizId.startsWith('df')) points = 10;
+                else if (quizId.startsWith('m')) points = 20;
+                else if (quizId.startsWith('d')) points = 30;
+                
+                if (!userData.quizzesAnswered.includes(quizId)) {
+                    userData.quizzesAnswered.push(quizId);
+                    addPoints(points); // Já salva e envia automaticamente
+                }
+            } else {
+                sounds.incorrect();
+                option.classList.add('incorrect');
+                allOptions.forEach(opt => {
+                    if (opt.onclick && opt.onclick.toString().includes('true')) {
+                        setTimeout(() => {
+                            opt.classList.add('correct');
+                        }, 1000);
+                    }
+                });
+            }
+        }
+        
+        // Fechar modal ao clicar fora
+        document.getElementById('simModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeSimulation();
+            }
+        });
+    </script>
+    <!-- ===== PAINEL DO PROFESSOR (abre com #admin no endereço ou pelo link do rodapé) ===== -->
+    <div id="admin-panel" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6); z-index:99999; overflow:auto; padding:16px;">
+        <div style="max-width:920px; margin:24px auto; background:#fff; border-radius:14px; padding:24px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; gap:12px;">
+                <h2 style="margin:0; color:#5a3fc0;">🔐 Painel do Professor</h2>
+                <button onclick="fecharAdmin()" style="background:#eee; border:none; padding:8px 14px; border-radius:8px; cursor:pointer;">✕ Fechar</button>
+            </div>
+            <div id="admin-login" style="margin-top:18px;">
+                <p style="margin-bottom:8px;">Digite a senha para acessar:</p>
+                <input type="password" id="admin-senha" placeholder="Senha" style="padding:10px; border:1px solid #ccc; border-radius:8px; font-size:15px; width:220px; max-width:100%;">
+                <button onclick="adminEntrar()" style="background:#5a3fc0; color:#fff; border:none; padding:10px 20px; border-radius:8px; cursor:pointer; font-weight:bold; margin-left:6px;">Entrar</button>
+                <p id="admin-erro" style="color:#c62828; display:none; margin-top:8px;">Senha incorreta.</p>
+            </div>
+            <div id="admin-conteudo" style="display:none; margin-top:18px;">
+                <h3 style="color:#333;">Desafio semanal ativo</h3>
+                <p id="admin-semana-atual" style="margin:4px 0 12px; font-weight:bold;">Carregando...</p>
+                <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                    <button onclick="adminSetSemana(1)" class="admin-btn">Lançar Semana 1</button>
+                    <button onclick="adminSetSemana(2)" class="admin-btn">Lançar Semana 2</button>
+                    <button onclick="adminSetSemana(3)" class="admin-btn">Lançar Semana 3</button>
+                    <button onclick="adminSetSemana(4)" class="admin-btn">Lançar Semana 4</button>
+                    <button onclick="adminSetSemana(0)" class="admin-btn" style="background:#777;">Automático (por data)</button>
+                </div>
+                <p id="admin-status" style="color:#2e7d32; margin-top:10px; min-height:20px;"></p>
+                <hr style="margin:20px 0; border:none; border-top:1px solid #eee;">
+                <div style="display:flex; justify-content:space-between; align-items:center; gap:12px;">
+                    <h3 style="color:#333; margin:0;">Progresso dos alunos</h3>
+                    <button onclick="adminCarregarDados()" style="background:#5a3fc0; color:#fff; border:none; padding:8px 16px; border-radius:8px; cursor:pointer;">Atualizar</button>
+                </div>
+                <div id="admin-dados" style="overflow:auto; margin-top:12px;"></div>
+            </div>
+        </div>
+    </div>
+    <div style="text-align:center; padding:14px; opacity:0.55; font-size:0.8em;">
+        <a href="#admin" onclick="abrirAdmin()" style="color:#999; text-decoration:none;">· Área do professor ·</a>
+    </div>
+</body>
+</html>
